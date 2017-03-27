@@ -1,0 +1,15 @@
+<div *ngIf="table">
+    <p-dataTable [value]="values" [editable]="true">
+        <span *ngFor="let hc of table.headingComponents">
+            <span *ngIf="hc.type == 'COLUMN'">
+                <p-column field="{{hc.label}}" header="{{hc.label}}" [editable]="true"></p-column>
+            </span>
+            <span *ngIf="hc.type == 'COLUMN_GROUP'">
+                <span *ngFor="let hc2 of hc.headingComponents">
+                    <p-column field="{{hc2.label}}" header="{{hc2.label}}" [editable]="true"></p-column>
+                </span>
+            </span>
+        </span>
+    </p-dataTable>
+</div>
+

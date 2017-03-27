@@ -2,3 +2,4 @@
 target
 !.gitignore
 dev.properties
+collect-web/collect-webapp/src/main/webapp/ng2/

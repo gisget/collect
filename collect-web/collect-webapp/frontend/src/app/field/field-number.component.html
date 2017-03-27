@@ -1,0 +1,15 @@
+<span [formGroup]="formGroup">
+    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4">
+                <strong>{{field.label}}</strong>
+                <input type="text" pInputText formControlName="{{fieldId}}" />
+            </div>
+            <div class="ui-grid-col-8">
+                <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!formGroup.controls[fieldId].valid && formGroup.controls[fieldId].dirty">
+                    <i class="fa fa-close"></i> required!
+                </div>
+            </div>
+        </div>
+    </div>
+</span>

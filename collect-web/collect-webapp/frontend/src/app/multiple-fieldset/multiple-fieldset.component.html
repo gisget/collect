@@ -1,0 +1,6 @@
+<button pButton type="button" icon="fa-plus" iconPos="left" class="ui-button-success" (click)="addFieldset()" label="Add a new {{multipleFieldset.label}}"></button>
+<button pButton type="button" icon="fa-times" iconPos="left" class="ui-button-danger" (click)="removeFieldset()" label="Remove the last {{multipleFieldset.label}}"></button>
+
+<div *ngIf="fieldsets">
+    <ofc-fieldset *ngFor="let fieldset of fieldsets" [fieldset]="fieldset" [parentId]="parentId"></ofc-fieldset>
+</div>

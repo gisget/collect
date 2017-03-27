@@ -1,0 +1,38 @@
+<div *ngFor="let child of children">
+    <div [ngSwitch]="child.type">
+        <div *ngSwitchCase="'FIELD'">
+            <div [ngSwitch]="child.attributeType">
+                <div *ngSwitchCase="'CODE'">
+                    <ofc-field-code [field]="child" [parentId]="parentId"></ofc-field-code>
+                </div>
+                <div *ngSwitchCase="'NUMBER'">
+                    <ofc-field-number [field]="child" [parentId]="parentId"></ofc-field-number>
+                </div>
+                <div *ngSwitchCase="'BOOLEAN'">
+                    <ofc-field-boolean [field]="child" [parentId]="parentId"></ofc-field-boolean>
+                </div>
+                <div *ngSwitchCase="'DATE'">
+                    <ofc-field-date [field]="child" [parentId]="parentId"></ofc-field-date>
+                </div>
+                <div *ngSwitchCase="'COORDINATE'">
+                    <ofc-field-coords [field]="child" [parentId]="parentId"></ofc-field-coords>
+                </div>
+                <div *ngSwitchDefault>
+                    <div style="color: red;">{{child.attributeType}} NOT IMPLEMENTED!</div>
+                </div>
+            </div>
+        </div>
+        <div *ngSwitchCase="'MULTIPLE_FIELDSET'">
+            <ofc-multiple-fieldset [multipleFieldset]="child"></ofc-multiple-fieldset>
+        </div>
+        <div *ngSwitchCase="'FIELDSET'">
+            <ofc-fieldset [fieldset]="child" [parentId]="parentId"></ofc-fieldset>
+        </div>
+        <div *ngSwitchCase="'TABLE'">
+            <ofc-table [table]="child" [parentId]="parentId"></ofc-table>
+        </div>
+        <div *ngSwitchDefault>
+            <div style="color: red;">NOT IMPLEMENTED!</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+<div *ngIf="tab">
+    <ofc-children [children]="tab.children" [parentId]="parentId"></ofc-children>
+    <ofc-tabs *ngIf="tab.tabs" [tabs]="tab.tabs" [parentId]="parentId"></ofc-tabs>
+</div>

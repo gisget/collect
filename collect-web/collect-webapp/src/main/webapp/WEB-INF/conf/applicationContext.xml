@@ -38,6 +38,8 @@
 	
 	<mvc:view-controller path="/" view-name="index" />
 	
+	<mvc:resources mapping="/ng2/**" location="/ng2/" />
+	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 	<bean class="org.openforis.collect.spring.handler.UrlFilenameHandlerAdapter" autowire="byName" />
