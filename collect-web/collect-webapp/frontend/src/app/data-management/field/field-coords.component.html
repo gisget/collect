@@ -2,13 +2,15 @@
 
 <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
     <div class="ui-grid-row">
-        <div class="ui-grid-col-6">
+        <div class="ui-grid-col-2">
             <strong>{{field.label}}</strong>
+        </div>
+        <div class="ui-grid-col-6">
             <input type="text" pInputText [(ngModel)]="val1" (ngModelChange)="onChange($event)" />
             <input type="text" pInputText [(ngModel)]="val2" (ngModelChange)="onChange($event)" />
             <input type="text" pInputText [(ngModel)]="val3" (ngModelChange)="onChange($event)" />
         </div>
-        <div class="ui-grid-col-6">
+        <div class="ui-grid-col-4">
         </div>
     </div>
 </div>
