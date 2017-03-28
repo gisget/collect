@@ -36,6 +36,21 @@ public class LocalUserManager implements UserManager {
 	private Map<Integer, User> userById = new TreeMap<Integer, User>();
 	private Map<String, User> userByName = new TreeMap<String, User>();
 	
+	@Override
+	public boolean login(String username, String rawPassword) {
+		User user = loadByUserName(username);
+		if (user == null) {
+			return false;
+		} else {
+			try {
+				String encodedPassword = checkAndEncodePassword(rawPassword);
+				return user.getPassword().equals(encodedPassword);
+			} catch (UserPersistenceException e) {
+				return false;
+			}
+		}
+	}
+	
 	public User loadById(int userId) {
 		User user = userById.get(userId);
 		if (user == null) {
@@ -140,7 +155,7 @@ public class LocalUserManager implements UserManager {
 		}
 	}
 	
-	public Boolean isDefaultAdminPasswordSet() {
+	public boolean isDefaultAdminPasswordSet() {
 		User adminUser = loadAdminUser();
 		String encodedDefaultPassword = encodePassword(ADMIN_DEFAULT_PASSWORD);
 		return encodedDefaultPassword.equals(adminUser.getPassword());
