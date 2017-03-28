@@ -5,7 +5,6 @@ import static org.openforis.collect.config.CollectConfiguration.getUsersRestfulA
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.openforis.collect.client.AbstractClient;
 import org.openforis.collect.model.User;
@@ -75,13 +74,18 @@ public class ClientUserManager extends AbstractClient implements UserManager  {
 	}
 
 	@Override
-	public Boolean isDefaultAdminPasswordSet() {
-		@SuppressWarnings({ "serial", "unchecked" })
-		Map<String, Object> result = post(getUsersRestfulApiUrl() + "/login", new HashMap<String, Object>(){{
-			put("username", ADMIN_USER_NAME);
-			put("rawPassword", ADMIN_DEFAULT_PASSWORD);
-		}}, Map.class);
-		return (Boolean) result.get("success");
+	public boolean isDefaultAdminPasswordSet() {
+		return login(ADMIN_USER_NAME, ADMIN_DEFAULT_PASSWORD);
+	}
+	
+	@Override
+	public boolean login(final String username, final String rawPassword) {
+		@SuppressWarnings("serial")
+		ResponseBody result = post(getUsersRestfulApiUrl() + "/login", new HashMap<String, Object>(){{
+			put("username", username);
+			put("rawPassword", rawPassword);
+		}}, ResponseBody.class);
+		return result.getStatus() == 200;
 	}
 
 	@Override

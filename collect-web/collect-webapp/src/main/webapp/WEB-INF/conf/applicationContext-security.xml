@@ -71,9 +71,7 @@
 	</http>
 	
 	<authentication-manager alias="authenticationManager">
-		<authentication-provider user-service-ref="userDetailsService">
-			<password-encoder hash="md5" />
-		</authentication-provider>
+		<authentication-provider ref="collectAuthenticationProvider" />
 	</authentication-manager>
 
 	<!-- See 15.3.2 Built-In Expression @http://static.springsource.org/spring-security/site/docs/3.0.x/reference/el-access.html#el-permission-evaluator -->
