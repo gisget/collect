@@ -18,7 +18,7 @@ import { SpinnerModule } from 'primeng/primeng';
 import { ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
 import { DataTableModule, SharedModule } from 'primeng/primeng';
 
-import { SurveyDesignerComponent } from './survey-designer.component';
+import { DataManagementComponent } from './data-management.component';
 import { ChildrenComponent } from './children/children.component';
 import { TabsComponent } from './tabs/tabs.component';
 import { TabComponent } from './tab/tab.component';
@@ -35,7 +35,7 @@ import { SurveyService } from './shared/survey.service';
 
 @NgModule({
     declarations: [
-        SurveyDesignerComponent,
+        DataManagementComponent,
         ChildrenComponent,
         TabsComponent,
         TabComponent,
@@ -50,7 +50,7 @@ import { SurveyService } from './shared/survey.service';
         CoordsComponent
     ],
     exports: [
-        SurveyDesignerComponent
+        DataManagementComponent
     ],
     imports: [
         CommonModule,
@@ -77,9 +77,9 @@ import { SurveyService } from './shared/survey.service';
         SurveyService
     ],
     entryComponents: [
-        SurveyDesignerComponent,
+        DataManagementComponent,
         MultipleFieldsetComponent,
         FieldsetComponent
     ]
 })
-export class SurveyDesignerModule { }
+export class DataManagementModule { }

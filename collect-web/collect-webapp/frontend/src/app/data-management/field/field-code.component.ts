@@ -33,10 +33,6 @@ export class FieldCodeComponent implements OnInit {
             this.formGroup = surveyForm;
         }
         this.formGroup.addControl(this.fieldId, this.formControl);
-
-        console.log(111, this.surveyService.getRecordChild(parseInt(this.fieldId)));
-
-
         this.values = this.surveyService.getCodeList(this.field.codeListId);
     }
 

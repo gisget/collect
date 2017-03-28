@@ -9,10 +9,10 @@ import { ConfirmationService } from 'primeng/primeng';
 import { SurveyService } from './shared/survey.service';
 
 @Component({
-    selector: 'survey-designer',
-    templateUrl: './survey-designer.component.html'
+    selector: 'data-management',
+    templateUrl: './data-management.component.html'
 })
-export class SurveyDesignerComponent implements OnInit {
+export class DataManagementComponent implements OnInit {
 
     private values: Object[];
     private tabSets: Object[];

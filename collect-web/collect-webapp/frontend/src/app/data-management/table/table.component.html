@@ -1,0 +1,10 @@
+<div *ngIf="table">
+    <p-dataTable [value]="values" [editable]="true">
+        <p-headerColumnGroup>
+            <p-row *ngFor="let hr of table.headingRows">
+                <p-column *ngFor="let hc of hr" header="{{hc.label}}" rowspan="{{hc.rowSpan}}" colspan="{{hc.colSpan}}"></p-column>
+            </p-row>
+        </p-headerColumnGroup>
+        <p-column *ngFor="let hc of table.headingColumns" field="{{hc.attributeDefinitionId}}"></p-column>
+    </p-dataTable>
+</div>

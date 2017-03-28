@@ -10,7 +10,7 @@ import { Record } from './record.model';
 @Injectable()
 export class SurveyService {
 
-    private surveyUrl: string = 'assets/sample_survey_5.json';
+    private surveyUrl: string = 'assets/sample_survey_6.json';
     private recordUrl: string = 'assets/record1.json';
 
     private surveyForm: FormGroup;
