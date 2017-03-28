@@ -11,6 +11,8 @@ public interface UserManager {
 	static final String ADMIN_DEFAULT_PASSWORD = "admin";
 	static final String PASSWORD_PATTERN = "^\\w{5,}$"; // alphanumeric, at least 5 letters
 
+	boolean login(String username, String rawPassword);
+
 	User loadById(int userId);
 
 	User loadByUserName(String userName);
@@ -27,7 +29,7 @@ public interface UserManager {
 
 	OperationResult changePassword(String username, String oldPassword, String newPassword) throws UserPersistenceException;
 
-	Boolean isDefaultAdminPasswordSet();
+	boolean isDefaultAdminPasswordSet();
 
 	void delete(int id) throws CannotDeleteUserException;
 
