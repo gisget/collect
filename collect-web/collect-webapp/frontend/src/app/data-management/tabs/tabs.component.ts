@@ -12,6 +12,8 @@ export class TabsComponent {
 
     @Input() parentId: [number, number];
 
+    @Input() values: any;
+
     constructor() { }
 
 }

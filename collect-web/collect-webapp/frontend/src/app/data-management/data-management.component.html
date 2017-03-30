@@ -11,6 +11,6 @@
 
 <form [formGroup]="surveyForm">
     <div *ngIf="tabSets">
-        <ofc-tabset *ngFor="let tabSet of tabSets" [tabSet]="tabSet"></ofc-tabset>
+        <ofc-tabset *ngFor="let tabSet of tabSets" [tabSet]="tabSet" [values]="values"></ofc-tabset>
     </div>
 </form>

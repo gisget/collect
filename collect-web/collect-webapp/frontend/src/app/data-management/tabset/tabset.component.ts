@@ -10,6 +10,8 @@ export class TabsetComponent {
 
     @Input() tabSet: Tabset;
 
+    @Input() values: any;
+
     constructor() { }
 
 }

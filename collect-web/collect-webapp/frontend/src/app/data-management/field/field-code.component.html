@@ -1,4 +1,4 @@
-<span *ngIf="values" [formGroup]="formGroup">
+<span *ngIf="options" [formGroup]="formGroup">
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
         <div class="ui-grid-row">
             <div class="ui-grid-col-2">
@@ -7,11 +7,11 @@
             <div class="ui-grid-col-6">
                 <span [ngSwitch]="field.layout">
                     <div *ngSwitchCase="'DROPDOWN'">
-                        <p-dropdown [options]="values" [autoWidth]="false" formControlName="{{fieldId}}"></p-dropdown>
+                        <p-dropdown [options]="options" [autoWidth]="false" formControlName="{{fieldId}}"></p-dropdown>
                     </div>
-                    <div *ngSwitchCase="'RADIO'" class="ui-g">
-                        <div *ngFor="let value of values" class="ui-g-12">
-                            <p-radioButton name="group1" value="{{value.value}}" label="{{value.label}}" formControlName="{{fieldId}}"></p-radioButton>
+                    <div *ngSwitchCase="'RADIO'">
+                        <div *ngFor="let option of options">
+                            <p-radioButton name="group-{{parentId}}-{{fieldId}}" value="{{option.value}}" label="{{option.label}}" formControlName="{{fieldId}}"></p-radioButton>
                         </div>
                     </div>
                     <div *ngSwitchCase="'TEXT'">

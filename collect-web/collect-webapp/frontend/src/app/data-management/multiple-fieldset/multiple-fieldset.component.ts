@@ -15,6 +15,8 @@ export class MultipleFieldsetComponent implements OnInit {
 
     @Input() parentId: [number, number];
 
+    @Input() values: any;
+
     private fieldsets: Fieldset[];
 
     constructor(private surveyService: SurveyService) { }
@@ -22,6 +24,11 @@ export class MultipleFieldsetComponent implements OnInit {
     ngOnInit() {
         this.fieldsets = [];
         this.addFieldset();
+        if (this.values != null) {
+            for (let i=1; i<this.values.length; i++) {
+                this.addFieldset();
+            }
+        }
     }
 
     private addFieldset(): void {

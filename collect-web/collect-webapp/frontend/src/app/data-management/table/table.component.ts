@@ -18,11 +18,9 @@ export class TableComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this.values = [
             {142:1, 264:2, 120:3, 223:4, 166:5, 219:6, 148:7, 1280:8, 1281:9, 56:10, 207:11}
         ];
-
     }
 
 }

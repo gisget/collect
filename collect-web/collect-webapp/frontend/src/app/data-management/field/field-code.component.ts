@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit } from '@angular/core';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 
 import { SurveyService } from '../shared/survey.service';
@@ -8,17 +8,18 @@ import { FieldCode } from './field-code.model';
     selector: 'ofc-field-code',
     templateUrl: './field-code.component.html'
 })
-export class FieldCodeComponent implements OnInit {
+export class FieldCodeComponent implements OnInit, AfterViewInit {
 
     @Input() field: FieldCode;
 
     @Input() parentId: [number, number];
 
+    @Input() values: any;
+
     private fieldId: string;
     private formControl: FormControl;
     private formGroup: FormGroup;
-    private values: Object[];
-    private value: any;
+    private options: Object[];
 
     constructor(private surveyService: SurveyService) { }
 
@@ -33,7 +34,15 @@ export class FieldCodeComponent implements OnInit {
             this.formGroup = surveyForm;
         }
         this.formGroup.addControl(this.fieldId, this.formControl);
-        this.values = this.surveyService.getCodeList(this.field.codeListId);
+        this.options = this.surveyService.getCodeList(this.field.codeListId);
+    }
+
+    ngAfterViewInit() {
+        if (this.values !== undefined) {
+            window.setTimeout(() => {
+                this.formControl.setValue(this.values[0]['fields'][0]['value']);
+            });
+        }
     }
 
 }

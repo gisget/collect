@@ -1,5 +1,5 @@
 <p-tabView *ngIf="tabs">
     <p-tabPanel *ngFor="let tab of tabs; let i = index; let first = first;" [selected]="first" header="{{tab.label}}" lazy="true">
-        <ofc-tab [tab]="tab" [parentId]="parentId"></ofc-tab>
+        <ofc-tab [tab]="tab" [parentId]="parentId" [values]="values"></ofc-tab>
     </p-tabPanel>
 </p-tabView>

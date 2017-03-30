@@ -2,5 +2,5 @@
 <button pButton type="button" icon="fa-times" iconPos="left" class="ui-button-danger" (click)="removeFieldset()" label="Remove the last {{multipleFieldset.label}}"></button>
 
 <div *ngIf="fieldsets">
-    <ofc-fieldset *ngFor="let fieldset of fieldsets" [fieldset]="fieldset" [parentId]="parentId"></ofc-fieldset>
+    <ofc-fieldset *ngFor="let fieldset of fieldsets; let i = index;" [fieldset]="fieldset" [parentId]="parentId" [values]="values.hasOwnProperty(i) ? values[i] : null"></ofc-fieldset>
 </div>

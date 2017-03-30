@@ -34,8 +34,8 @@ export class SurveyService {
         this.recordChildren = recordChildren;
     }
 
-    getRecordChild(id: number): any {
-        return this.recordChildren.hasOwnProperty(id) ? this.recordChildren[id] : null;
+    getRecordChild(): any {
+        return this.recordChildren;
     }
 
     getForm(): FormGroup {
@@ -62,7 +62,7 @@ export class SurveyService {
             for (let item of codeList.items) {
                 values.push({
                     label: item['label'],
-                    value: item['id']
+                    value: item['code']
                 });
             }
             this.parsedCodeLists[codeList.id] = values;

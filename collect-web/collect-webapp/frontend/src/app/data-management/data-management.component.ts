@@ -14,10 +14,8 @@ import { SurveyService } from './shared/survey.service';
 })
 export class DataManagementComponent implements OnInit {
 
-    private values: Object[];
     private tabSets: Object[];
-    private record: Array<Object>[];
-
+    public values: any;
     private surveyForm: FormGroup;
 
     constructor(private fb: FormBuilder, private confirmationService: ConfirmationService, private surveyService: SurveyService) {
@@ -36,20 +34,19 @@ export class DataManagementComponent implements OnInit {
 
     ngOnInit() {
         this.surveyService.getSurvey().then(survey => {
-            console.log('survey', survey);
+            console.log('survey: ', survey);
             this.surveyService.getRecord().then(record => {
-                console.log('record', record);
-                this.record = record['rootEntity']['childrenByDefinitionId'];
-                this.surveyService.setRecord(this.record);
-                //
-                this.tabSets = survey.uiConfiguration.tabSets;
+                console.log('record: ', record);
+                this.values = record['rootEntity'];
                 this.surveyService.setCodeLists(survey.codeLists);
+                this.tabSets = survey.uiConfiguration.tabSets;
             }, err => {
                 console.log(err);
             });
         }, err => {
             console.log(err);
         });
+
     }
 
     onSubmit(form: FormGroup) {

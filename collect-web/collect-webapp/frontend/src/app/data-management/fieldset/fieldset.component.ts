@@ -12,6 +12,8 @@ export class FieldsetComponent {
 
     @Input() parentId: [number, number];
 
+    @Input() values: any;
+
     constructor() { }
 
 }
