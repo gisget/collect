@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.openforis.collect.designer.form.FormObject;
+import org.openforis.collect.designer.metamodel.SchemaUpdater;
 import org.openforis.collect.designer.session.SessionStatus;
 import org.openforis.collect.designer.util.ComponentUtil;
 import org.openforis.collect.designer.util.MessageUtil;
@@ -80,7 +81,8 @@ public abstract class SurveyBaseVM extends BaseVM {
 	private boolean currentFormValid;
 	private Map<String, List<String>> currentFormValidationMessages;
 	protected List<String> fieldLabelKeyPrefixes;
-
+	protected SchemaUpdater schemaUpdater;
+	
 	public SurveyBaseVM() {
 		currentFormValid = true;
 		currentFormBlocking = false;
@@ -92,6 +94,8 @@ public abstract class SurveyBaseVM extends BaseVM {
 		super.init();
 		initSurvey();
 		initCurrentLanguageCode();
+		
+		schemaUpdater = new SchemaUpdater(survey);
 	}
 	
 	private void initCurrentLanguageCode() {
@@ -136,6 +140,10 @@ public abstract class SurveyBaseVM extends BaseVM {
 	}
 	
 	public void undoLastChanges() {
+		dispatchCurrentFormValidatedCommand();
+	}
+	
+	public void dispatchCurrentFormValidatedCommand() {
 		dispatchCurrentFormValidatedCommand(true);
 	}
 	

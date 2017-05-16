@@ -49,13 +49,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  * @author A. Sanchez-Paus Diaz
  *
  */
-public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFileCreator{
+public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFileCreator {
 
 	private static final String README_FILE_PATH = "org/openforis/collect/designer/templates/collectearth/README.txt";
 	private static final String EARTH_FILES_RESOURCE_PATH = "org/openforis/collect/designer/templates/collectearth/earthFiles/";
 	private static final String EARTH_FILES_FOLDER_NAME = "earthFiles";
 	private static final String KML_TEMPLATE_PATH = "org/openforis/collect/designer/templates/collectearth/kml_template.txt";
-	private static final String PLACEMARK_FILE_NAME = "placemark.idm.xml";
 	private static final String BALLOON_FILE_NAME = "balloon.html";
 	private static final String KML_TEMPLATE_FILE_NAME = "kml_template.fmt";
 	private static final String TEST_PLOTS_FILE_NAME = "test_plots.ced";
@@ -63,7 +62,6 @@ public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFi
 	private static final String PROJECT_PROPERTIES_FILE_NAME = "project_definition.properties";
 	private static final double HECTARES_TO_SQUARE_METERS_CONVERSION_FACTOR = 10000d;
 	private static final String README_FILE = "README.txt";
-//	private static final String SAIKU_SCHEMA_PLACEHOLDER = "${saikuDbSchema}";
 	private static final String GRID_FOLDER_NAME = "grid";
 	
 	private Logger logger = LoggerFactory.getLogger( CollectEarthProjectFileCreatorImpl.class);
@@ -159,7 +157,7 @@ public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFi
 		Properties p = new Properties();
 		p.put("survey_name", survey.getName());
 		p.put("balloon", "${project_path}/balloon.html");
-		p.put("metadata_file", "${project_path}/placemark.idm.xml");
+		p.put("metadata_file", "${project_path}/" + PLACEMARK_FILE_NAME);
 		p.put("template", "${project_path}/kml_template.fmt");
 		p.put("csv", "${project_path}/" + determineSelectedGridFileName(survey));
 		p.put("sample_shape", "SQUARE");
@@ -167,7 +165,6 @@ public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFi
 		p.put("distance_to_plot_boundaries", String.valueOf(calculateFrameDistance(survey)));
 		p.put("number_of_sampling_points_in_plot", String.valueOf(survey.getAnnotations().getCollectEarthSamplePoints()));
 		p.put("inner_point_side", "2");
-		p.put("use_browser", "chrome");
 		p.put("ui_language", language);
 		p.put("bing_maps_key", getBingMapsKey(survey));
 		p.put("open_bing_maps", isBingMapsEnabled(survey));
@@ -175,6 +172,7 @@ public class CollectEarthProjectFileCreatorImpl implements CollectEarthProjectFi
 		p.put("open_earth_engine", isGEEExplorerEnabled(survey));
 		p.put("open_gee_playground", isGEECodeEditorEnabled(survey));
 		p.put("open_street_view", isStreetViewEnabled(survey));
+		p.put("extra_map_url_UNCOMMENT", "http://url?lat=LATITUDE&long=LONGITUDE");
 		p.put("coordinates_reference_system", getSRSUsed(survey));
 
 		File file = File.createTempFile("collect-earth-project", ".properties");

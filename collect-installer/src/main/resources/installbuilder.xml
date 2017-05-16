@@ -51,7 +51,7 @@
 			<!-- start of Linux desktop shortcuts -->
 			<desktopShortcutList>
 				<shortcut>
-					<name>Launch Open Foris Collect</name>
+					<name>Open Foris Collect</name>
 					<comment>Launch Open Foris Collect</comment>
 					<exec>${java_launcher_destination}/${java_launcher_binary_name}</exec>
 					<path>${java_launcher_destination}</path>
@@ -88,6 +88,28 @@
 			<!-- end of Windows start menu shortcuts -->
 			
         	<postInstallationActionList>
+        		<if>
+        			<conditionRuleList>
+				        <platformTest type="windows-x86" />
+				        <platformTest type="linux-x86" />
+				    </conditionRuleList>
+				    <conditionRuleEvaluationLogic>or</conditionRuleEvaluationLogic>
+	        		<actionList>
+		        		<propertiesFileSet>
+		        			<file>${installdir}/launcher.properties</file>
+		        			<key>additional_vm_parameters</key>
+		        			<value>-Xmx1024m -Duser.language=en -Duser.country=US</value>
+		        		</propertiesFileSet>
+	        		</actionList>
+	        		<elseActionList>
+		        		<propertiesFileSet>
+		        			<file>${installdir}/launcher.properties</file>
+		        			<key>additional_vm_parameters</key>
+		        			<value>-Xmx2048m -Duser.language=en -Duser.country=US</value>
+		        		</propertiesFileSet>
+	        		</elseActionList>
+        		</if>
+        		
         		<!-- rename launcher.properties file according to the current platform -->
         		<renameFile>
         			<origin>${installdir}/launcher.properties</origin>
@@ -113,6 +135,14 @@
         		</renameFile>
         		<!-- end of rename launcher.properties -->
         		
+        		<!-- create launcher shortcut for MacOS -->
+		        <createSymLink target="${java_launcher_destination}/${java_launcher_binary_name}" 
+			        	linkName="~/Desktop/${java_launcher_startmenu_shortcut_name}">
+		        	<ruleList>
+		        		<platformTest type="osx" />
+					</ruleList>
+	        	</createSymLink>
+        		
 				<!-- create Data folder -->
 				<createDirectory>
 					<path>${data_dir}</path>
@@ -123,8 +153,8 @@
 				</createDirectory>
 				<!-- Find free http port -->
 		        <getFreePort>
-		            <finalPort>8399</finalPort>
 		            <initialPort>8380</initialPort>
+		            <finalPort>8399</finalPort>
 		            <variable>http_port</variable>
 		        </getFreePort>
 		        <!-- Write the ports configuration in collect.properties file -->
@@ -133,14 +163,6 @@
 		        	<key>collect.http_port</key>
 		        	<value>${http_port}</value>
 		        </propertiesFileSet>
-        		
-        		<!-- create launcher shortcut for MacOS -->
-		        <createSymLink target="${java_launcher_destination}/${java_launcher_binary_name}" 
-			        	linkName="~/Desktop/${java_launcher_startmenu_shortcut_name}">
-		        	<ruleList>
-		        		<platformTest type="osx" />
-					</ruleList>
-	        	</createSymLink>
         	</postInstallationActionList>
 		</component>
 		<component>
@@ -195,6 +217,10 @@ check_for_updates = 1</text>
         			<name>installdir</name>
         			<value>${env(SYSTEMDRIVE)}/OpenForis/Collect</value> 
         		</setInstallerVariable>
+        		<setInstallerVariable>
+        			<name>old_installdir</name>
+        			<value>${env(SYSTEMDRIVE)}/opt/openforis/collect</value> 
+        		</setInstallerVariable>
         	</actionList>
         	<conditionRuleList>
         		<platformTest type="windows" />
@@ -203,6 +229,10 @@ check_for_updates = 1</text>
 				<setInstallerVariable>
 					<name>installdir</name>
 					<value>~/OpenForis/Collect</value>
+				</setInstallerVariable>
+				<setInstallerVariable>
+					<name>old_installdir</name>
+					<value>/opt/openforis/collect</value>
 				</setInstallerVariable>
 			</elseActionList>
 		</if>
@@ -216,8 +246,9 @@ check_for_updates = 1</text>
 		</setInstallerVariable>
 		<setInstallerVariable>
 			<name>log_dir</name>
-			<value>${collect_root_user_dir}/log</value>
+			<value>${installdir}/logs</value>
 		</setInstallerVariable>
+		<!--  Java Launcher variables -->
 		<setInstallerVariable>
 			<name>java_launcher_mainClass</name>
 			<value>org.openforis.collect.controlpanel.CollectControlPanel</value>
@@ -238,15 +269,20 @@ check_for_updates = 1</text>
 			<name>java_launcher_osx_icon</name>
 			<value>${installdir}/images/of-collect-logo.icns</value>
 		</setInstallerVariable>
+		<setInstallerVariable>
+			<name>java_launcher_startmenu_shortcut_name</name>
+			<value>${project.fullName}</value>
+		</setInstallerVariable>
+		<!-- End of Java Launcher variables -->
 		<throwError>
 			<explanation>Open Foris Collect has been already installed</explanation>
 			<text>Open Foris Collect has been already installed.
 Please run Update Open Foris Collect if you want to update it
 or delete the folder ${installdir} and try again.</text>
-			<ruleEvaluationLogic>and</ruleEvaluationLogic>
+			<ruleEvaluationLogic>or</ruleEvaluationLogic>
 			<ruleList>
-				<fileTest path="${installdir}" condition="exists" />
 				<fileTest path="${installdir}" condition="is_not_empty" />
+				<fileTest path="${old_installdir}" condition="is_not_empty" />
 			</ruleList>
         </throwError>
 	</preInstallationActionList>
