@@ -79,7 +79,7 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 	delay = defaultIfNull(delay, 100);
 	retryCount = defaultIfNull(retryCount, 0);
 	if (DEBUG) {
-		log("sending update request (delay=" + delay + ")");
+		log("1/4 sending update request (delay=" + delay + ")");
 	}
 	var inputFieldName = $(inputField).attr("id");
 	if (lastUpdateInputFieldName == inputFieldName) {
@@ -101,6 +101,9 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 	// if the user stops clicking for over one second
 
 	ajaxTimeout = setTimeout(function() {
+		if (DEBUG) {
+			log("2/4 create update request");
+		}
 		var data = createPlacemarkUpdateRequest(inputField);
 		
 		lastUpdateRequest = $.ajax({
@@ -125,6 +128,9 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 			}
 		})
 		.done(function(json) {
+			if (DEBUG) {
+				log("4/4 json response received");
+			}
 			if (json.success) {
 				handleSuccessfullDataUpdateResponse(json, activelySaved, blockUI);
 			} else {
@@ -151,6 +157,9 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 			lastUpdateInputFieldName = null;
 
 		});
+		if (DEBUG) {
+			log("3/4 request sent, waiting for response...");
+		}
 	}, delay);
 	
 	lastUpdateInputFieldName = inputFieldName;
@@ -237,8 +246,9 @@ var createPlacemarkUpdateRequest = function(inputField) {
 }
 
 var abortLastUpdateRequest = function() {
-	clearTimeout(ajaxTimeout);
-
+	if (ajaxTimeout != null) {
+		clearTimeout(ajaxTimeout);
+	}
 	if (lastUpdateRequest != null) {
 		if (DEBUG) {
 			log("abort last update request");
@@ -253,14 +263,30 @@ var undoChanges = function() {
 };
 
 var interpretJsonSaveResponse = function(json, showFeedbackMessage) {
+	if (DEBUG) {
+		log("Parsing response:")
+	}
+	if (DEBUG) {
+		log("1/3: Update field status cache")
+	}
 	updateFieldStateCache(json.inputFieldInfoByParameterName);
+	if (DEBUG) {
+		log("2/3: Update input field status")
+	}
 	updateInputFieldsState(json.inputFieldInfoByParameterName);
+	if (DEBUG) {
+		log("3/3: Fill data in input fields")
+	}
 	fillDataWithJson(json.inputFieldInfoByParameterName);
 
+	if (DEBUG) {
+		log("Response parsed correctly");
+	}
+	
 	if (showFeedbackMessage) { // show feedback message
 		if (json.success) {
 			if (isAnyErrorInForm()) {
-				var message = "";
+				var message = "<ul>";
 				for(var key in stateByInputFieldName) {
 					var info = stateByInputFieldName[key];
 					if (info.inError) {
@@ -271,9 +297,10 @@ var interpretJsonSaveResponse = function(json, showFeedbackMessage) {
 						} else {
 							label = inputField.length > 0 ? OF.UI.Forms.getFieldLabel(inputField): "";
 						}
-						message += label + " : " + info.errorMessage + "<br>";
+						message += "<li>" + label + " : " + info.errorMessage + "</li>";
 					}
 				}
+				message += "</ul>";
 				showErrorMessage(message);
 
 				// Resets the "actively saved" parameter to false so that it is
@@ -365,7 +392,7 @@ var updateInputFieldsState = function(inputFieldInfoByParameterName) {
 			defaultMessage : info.errorMessage
 		});
 	});
-	OF.UI.Forms.Validation.updateErrorMessageInFields($form, changedFieldNames, errors);
+	OF.UI.Forms.Validation.updateErrorMessageInFields($form, changedFieldNames, errors, {doNotIncludeFieldLabel: true});
 
 	updateStepsErrorFeedback();
 
@@ -422,6 +449,8 @@ var toggleStepVisibility = function(index, visible) {
 				stepHeading.removeClass("disabled");
 			}
 		}
+		var hasErrors = stepBody.find(".form-group.has-error").length > 0;
+		stepHeading.toggleClass("error", hasErrors);
 	} else {
 		stepHeading.addClass("disabled notrelevant");
 	}
@@ -533,12 +562,16 @@ var initBooleanButtons = function() {
 		var hiddenField = group.find("input[type='hidden']");
 		group.find("button").click(function() {
 			var btn = $(this);
-			hiddenField.val(btn.val());
 			var wasSelected = btn.hasClass('active');
 			group.find('button').removeClass('active');
-			if (! wasSelected) {
+			var selectedValue;
+			if (wasSelected) {
+				selectedValue = null;
+			} else {
+				selectedValue = btn.val();
 				btn.addClass('active');
 			}
+			hiddenField.val(selectedValue);
 			updateData(hiddenField);
 			return false;
 		});
@@ -650,7 +683,7 @@ var checkIfPlacemarkAlreadyFilled = function(checkCount) {
 				}
 			}
 			setStepsAsVisited();
-			// Pre-fills the form and after that initilizes the
+			// Pre-fills the form and after that initializes the
 			// change event listeners for the inputs
 			interpretJsonSaveResponse(json, false);
 				
@@ -669,7 +702,14 @@ var checkIfPlacemarkAlreadyFilled = function(checkCount) {
 };
 
 var getPlacemarkId = function() {
-	var id = findById("collect_text_id").val();
+	var arrayLength = EXTRA_ID_ATTRIBUTES.length;
+	var id = "";
+	for (var i = 0; i < arrayLength; i++) {
+		id += $form.find("input[name='" + EXTRA_ID_ATTRIBUTES[i] + "']").val();
+		if( i < arrayLength-1){
+			id += ",";
+		}
+	}
 	return id;
 };
 
@@ -695,27 +735,33 @@ var showErrorMessage = function(message) {
 };
 
 var showMessage = function(message, type) {
-	var color;
+	var color, successIconVisible, title;
 	switch (type) {
 	case "error":
+		title = 'Error';
 		color = "red";
+		successIconVisible = false;
 		break;
 	case "warning":
+		title = 'Warning';
 		color = "yellow";
+		successIconVisible = false;
 		break;
 	case "success":
+		title = 'Success!';
+		successIconVisible = true;
 	default:
 		color = "green";
 	}
 	$('#succ_mess').css("color", color).html(message ? message : "");
+	$("#dialogSuccess").find(".success-icon").toggle(successIconVisible);
+	$("#dialogSuccess").dialog({
+		title: title
+	});
 	$("#dialogSuccess").dialog("open");
 };
 
 var fillDataWithJson = function(inputFieldInfoByParameterName) {
-	if (DEBUG) {
-		log("setting values in input fields...");
-	}
-
 	$.each(inputFieldInfoByParameterName, function(key, info) {
 		var value = info.value;
 		// Do this for every key there might be different
@@ -734,9 +780,6 @@ var fillDataWithJson = function(inputFieldInfoByParameterName) {
 			setValueInInputField(inputField, value);
 		}
 	});
-	if (DEBUG) {
-		log("values set in input fields");
-	}
 }
 
 var setValueInInputField = function(inputField, value) {

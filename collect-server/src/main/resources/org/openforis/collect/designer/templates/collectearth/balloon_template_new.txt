@@ -54,7 +54,7 @@
  	* STATIC CONSTANTS 
  	* DO NOT REMOVE THIS LINE
  	*/
-	var DEBUG = false; // if set to true, log messages will appear in a box in the bottom part of the balloon
+	var DEBUG = true; // if set to true, log messages will appear in a box in the bottom part of the balloon
  	var NEXT_ID = "$[next_id]";
  	var HOST = "$[host]";
  	
@@ -91,7 +91,7 @@
 	<script src="earthFiles/openforis/of-ui-forms.js?v=$[randomNumber]"></script>
 	<script src="earthFiles/openforis/of-ui-forms-validation.js?v=$[randomNumber]"></script>
 	
-	<script src="earthFiles/js/earth.js?v=$[randomNumber]"></script>
+	<script src="earthFiles/js/earth_new.js?v=$[randomNumber]"></script>
 	
 	<link href="earthFiles/jquery/jquery-ui.css?v=$[randomNumber]" rel="stylesheet" />
 	<link href="earthFiles/jquery/jquery.selectBoxIt.css?v=$[randomNumber]" rel="stylesheet" />
@@ -113,7 +113,12 @@
 		      font-family: 'lo'; 
 			  src: url('$[host]generated/earthFiles/fonts/Phetsarath_OT.ttf');
 			}
-		
+			
+			@font-face {
+		      font-family: 'mn'; 
+			  src: url('$[host]generated/earthFiles/fonts/arhangai.ttf');
+			}
+			
 			body {
 				font-family: "PLACEHOLDER_UI_LANGUAGE","Trebuchet MS", "Helvetica", "Arial", "Verdana",
 					"sans-serif";
@@ -127,7 +132,7 @@
 		<table>
 			<tr>
 				<td valign="top">
-					<span class="ui-icon ui-icon-circle-check"
+					<span class="success-icon ui-icon ui-icon-circle-check"
 						style="float: left; margin: 0 7px 70px 0;"> </span>
 				</td>
 				<td valign="top">
@@ -138,7 +143,7 @@
 		</table>
 	</div>
 
-	<div id="contentDiv">
+	<div id="contentDiv" style="height:600px; width:100%;">
 		<div id="loadingPanel">
 			<span>Loading...</span>
 		</div>
@@ -174,6 +179,6 @@ PLACEHOLDER_FOR_DYNAMIC_FIELDS
 			</form>
 		</div>
 	</div>
-	<iframe style="display: none" src="http://127.0.0.1:$[local_port]/earth/openAuxiliaryWindows?latLongCoordinates=$[latitude],$[longitude]" height="0" width="0"></iframe>
+	<iframe style="display: none" src="http://127.0.0.1:$[local_port]/earth/ancillaryWindows?PLACEHOLDER_FOR_EXTRA_ID_GET_REQUEST" height="0" width="0"></iframe>
 </body>
 </html>

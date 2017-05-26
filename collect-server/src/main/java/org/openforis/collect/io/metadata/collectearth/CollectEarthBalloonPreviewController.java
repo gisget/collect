@@ -54,6 +54,7 @@ public class CollectEarthBalloonPreviewController extends AbstractPlacemarkDataC
 		String html = generator.generateHTML();
 		html = html.replace("earth.js", "earth_new.js");
 		writeHtmlToResponse(response, html);
+		earthSurveyService.clearRecordCache(survey);
 	}
 
 	private void writeHtmlToResponse(HttpServletResponse response, String html) throws IOException {

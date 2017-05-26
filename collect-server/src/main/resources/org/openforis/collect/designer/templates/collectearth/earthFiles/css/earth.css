@@ -182,6 +182,11 @@ table.independentToggle button, .independentToggle button {
 	margin-bottom: 2px;
 }
 
+.wizard > .content > .body .form-group.has-error input {
+	color: #a94442;
+	border-color: #a94442;
+}
+
 form input[type='text'] {
 	width: 200px;
 }

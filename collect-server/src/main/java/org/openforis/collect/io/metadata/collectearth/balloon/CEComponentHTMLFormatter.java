@@ -213,7 +213,7 @@ public class CEComponentHTMLFormatter {
 				fieldBuilder = formControlContainer.e("input") //$NON-NLS-1$
 					.a("id", elId) //$NON-NLS-1$
 					.a("name", elId) //$NON-NLS-1$
-					.a("type", "text") //$NON-NLS-1$ //$NON-NLS-2$
+					.a("type", "number") //$NON-NLS-1$ //$NON-NLS-2$
 					.a("value", "0") //$NON-NLS-1$ //$NON-NLS-2$
 					.a("class", "form-control numeric"); //$NON-NLS-1$ //$NON-NLS-2$
 				if (comp.isReadOnly()) {

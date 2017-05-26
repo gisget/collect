@@ -170,8 +170,10 @@ public class CollectEarthBalloonGenerator {
 	
 
 	private String getHTMLTemplate() throws IOException {
-		InputStream is = getClass().getClassLoader().getResourceAsStream(preview ? 
-				NEW_BALLOON_TEMPLATE_TXT : BALLOON_TEMPLATE_TXT);
+//		String balloonTempalteFileName = preview ? 
+//				NEW_BALLOON_TEMPLATE_TXT : BALLOON_TEMPLATE_TXT;
+		String balloonTemplateFileName = NEW_BALLOON_TEMPLATE_TXT;
+		InputStream is = getClass().getClassLoader().getResourceAsStream(balloonTemplateFileName);
 		StringWriter writer = new StringWriter();
 		IOUtils.copy(is, writer, OpenForisIOUtils.UTF_8);
 		String template = writer.toString();
