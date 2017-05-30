@@ -7,6 +7,7 @@ var ACTIVELY_SAVED_FIELD_ID = "collect_boolean_actively_saved";
 var NESTED_ATTRIBUTE_ID_PATTERN = /\w+\[\w+\]\.\w+/;
 var EXTRA_FIELD_CLASS = "extra";
 var MAX_DATA_UPDATE_RETRY_COUNT = 0;
+var REQUEST_TIMEOUT = 10000;
 
 var DEFAULT_STATE = "default";
 var LOADING_STATE = "loading";
@@ -110,7 +111,7 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 			data : data,
 			type : "POST",
 			url : $form.attr("action"),
-			timeout: 2000,
+			timeout: REQUEST_TIMEOUT,
 			dataType : 'json',
 			beforeSend : function() {
 				if (blockUI) {
@@ -654,7 +655,7 @@ var checkIfPlacemarkAlreadyFilled = function(checkCount) {
 		type : "GET",
 		url : HOST + "placemark-info-expanded",
 		dataType : 'json',
-		timeout : 2000
+		timeout : REQUEST_TIMEOUT
 	})
 	.fail(function(xhr, textStatus, errorThrown) {
 		if (isValidResponse(xhr.responseText)) {
