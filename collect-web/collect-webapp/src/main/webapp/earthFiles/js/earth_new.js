@@ -6,7 +6,7 @@ var TIME_FORMAT = 'HH:ss';
 var ACTIVELY_SAVED_FIELD_ID = "collect_boolean_actively_saved";
 var NESTED_ATTRIBUTE_ID_PATTERN = /\w+\[\w+\]\.\w+/;
 var EXTRA_FIELD_CLASS = "extra";
-var MAX_DATA_UPDATE_RETRY_COUNT = 5;
+var MAX_DATA_UPDATE_RETRY_COUNT = 0;
 
 var DEFAULT_STATE = "default";
 var LOADING_STATE = "loading";
@@ -153,6 +153,7 @@ var sendDataUpdateRequest = function(inputField, activelySaved, blockUI, delay, 
 			}
 		})
 		.always(function() {
+			ajaxTimeout = null;
 			lastUpdateRequest = null;
 			lastUpdateInputFieldName = null;
 
@@ -266,18 +267,26 @@ var interpretJsonSaveResponse = function(json, showFeedbackMessage) {
 	if (DEBUG) {
 		log("Parsing response:")
 	}
+	
 	if (DEBUG) {
-		log("1/3: Update field status cache")
+		log("1/4: Update field status cache")
 	}
 	updateFieldStateCache(json.inputFieldInfoByParameterName);
+	
 	if (DEBUG) {
-		log("2/3: Update input field status")
+		log("2/4: Update input field status")
 	}
 	updateInputFieldsState(json.inputFieldInfoByParameterName);
+
 	if (DEBUG) {
-		log("3/3: Fill data in input fields")
+		log("3/4: Fill data in input fields")
 	}
 	fillDataWithJson(json.inputFieldInfoByParameterName);
+	
+	if (DEBUG) {
+		log("4/4: Update steps error feedback")
+	}
+	updateStepsErrorFeedback();
 
 	if (DEBUG) {
 		log("Response parsed correctly");
@@ -393,8 +402,6 @@ var updateInputFieldsState = function(inputFieldInfoByParameterName) {
 		});
 	});
 	OF.UI.Forms.Validation.updateErrorMessageInFields($form, changedFieldNames, errors, {doNotIncludeFieldLabel: true});
-
-	updateStepsErrorFeedback();
 
 	if (DEBUG) {
 		log("updating fields relevance");
@@ -653,9 +660,8 @@ var checkIfPlacemarkAlreadyFilled = function(checkCount) {
 		if (isValidResponse(xhr.responseText)) {
 			//valid response but for some (unknown) reason not handled properly by jquery
 			handleValidResponse($.parseJSON(xhr.responseText));
-		} else if (checkCount < 5) {
-			// try again
-			checkIfPlacemarkAlreadyFilled(checkCount + 1);
+//		} else if (checkCount < 5) {
+//			checkIfPlacemarkAlreadyFilled(checkCount + 1);
 		} else {
 			changeState(COLLECT_EARTH_NOT_RUNNING_STATE);
 		}
