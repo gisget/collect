@@ -1,24 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-
-import { MenuItem } from 'primeng/primeng';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-    private items: MenuItem[];
+    constructor(private translate: TranslateService) {
+        translate.addLangs(['en', 'fr', 'ur']);
+        translate.setDefaultLang('en');
 
-    constructor() {
-    }
-
-    ngOnInit() {
-        this.items = [
-            { label: 'HOME', icon: 'fa-home', routerLink: [''] },
-            { label: 'DATA MANAGEMENT', icon: 'fa-table', routerLink: ['/data-management'] }
-        ];
+        const browserLang = translate.getBrowserLang();
+        translate.use(browserLang.match(/en|fr|ur/) ? browserLang : 'en');
     }
 
 }
