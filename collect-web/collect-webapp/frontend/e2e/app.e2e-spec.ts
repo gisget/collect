@@ -1,14 +1,14 @@
-import { CollectSurveyVisualizerPage } from './app.po';
+import { CliStablePage } from './app.po';
 
-describe('collect-survey-visualizer App', () => {
-  let page: CollectSurveyVisualizerPage;
+describe('open-foris-collect App', () => {
+  let page: OpenForisCollectPage;
 
   beforeEach(() => {
-    page = new CollectSurveyVisualizerPage();
+    page = new OpenForisCollectPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display message Open Foris Collect', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Open Foris Collect');
   });
 });

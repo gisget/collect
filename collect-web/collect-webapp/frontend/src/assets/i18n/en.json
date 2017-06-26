@@ -1,15 +1,9 @@
 {
+	"home-page": "Home Page",
     "dashboard": "Dashboard",
-    "charts": "Charts",
-    "tables": "Tables",
-    "froms": "Froms",
-    "boostrapElement": "Boostrap Element",
-    "boostrapGrid": "Boostrap Grid",
-    "component": "Component",
+    "data-management": "Data Management",
+    "record-list": "List of records",
     "menu": "Menu",
     "submenu": "Submenu",
-    "blankpage": "Blank Page",
-    "moretheme": "More Themes",
-    "downloadNow": "Download Now",
     "language": "Language"
 }

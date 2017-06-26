@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "collect-survey-visualizer"
+    "name": "open-foris-collect"
   },
   "apps": [
     {
@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        ".htaccess"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -19,12 +20,14 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
+      	"styles/app.scss",
+        "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/primeng/resources/themes/omega/theme.css",
-        "../node_modules/primeng/resources/primeng.min.css",
-        "../node_modules/font-awesome/css/font-awesome.min.css"
+        "../node_modules/primeng/resources/primeng.min.css"
       ],
-      "scripts": [],
+      "scripts": [
+	    "../node_modules/chart.js/dist/Chart.js"
+	  ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -54,7 +57,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "component": {}
   }
 }

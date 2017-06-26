@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class CollectSurveyVisualizerPage {
+export class OpenForisCollectPage {
   navigateTo() {
     return browser.get('/');
   }
