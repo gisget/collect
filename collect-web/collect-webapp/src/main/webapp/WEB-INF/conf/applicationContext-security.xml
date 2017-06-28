@@ -6,9 +6,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/security 
-		http://www.springframework.org/schema/security/spring-security-4.0.xsd
+		http://www.springframework.org/schema/security/spring-security-4.2.xsd
         http://www.springframework.org/schema/beans 
-        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
         ">
 
 	<!-- Enables Method Security and Expression-based access control -->
@@ -42,6 +42,8 @@
 <!-- 		for netscape compatible browser and uplaod to a secured url -->
 		<intercept-url access="permitAll" pattern="/uploadData.htm" />
 		<intercept-url access="permitAll" pattern="/uploadFile.htm" />
+		
+		<intercept-url access="hasRole('ROLE_USER')" pattern="/ng/**" />
 		
 		<intercept-url access="hasRole('ROLE_USER') or hasIpAddress('127.0.0.1')" pattern="/command/**" />
 

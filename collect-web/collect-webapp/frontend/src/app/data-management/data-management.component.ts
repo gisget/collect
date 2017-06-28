@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SurveyService } from 'app/shared';
+
 @Component({
     selector: 'app-data-management',
     templateUrl: './data-management.component.html',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DataManagementComponent implements OnInit {
 
-    constructor() {
+    constructor(private surveyService: SurveyService) {
     }
     ngOnInit() {}
 }

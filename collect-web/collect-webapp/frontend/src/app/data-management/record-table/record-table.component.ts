@@ -1,17 +1,18 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, OnChanges, Input } from '@angular/core';
 
 import { LazyLoadEvent }    from 'primeng/components/common/api';
 import { DataTableModule }  from 'primeng/primeng';
 
-import { RecordSummary }    from 'app/shared/model/record-summary';
-import { RecordService }    from 'app/shared/services/record-service';
+import { RecordSummary, Survey } from 'app/shared/model';
+import { RecordService }    from 'app/shared/services';
 
 @Component({
     selector: 'app-record-table',
     templateUrl: './record-table.component.html',
     styleUrls: ['./record-table.component.scss']
 })
-export class RecordTableComponent implements OnInit {
+export class RecordTableComponent implements OnInit, OnChanges {
+    @Input() survey: Survey;
     
     records: RecordSummary[]; 
     displayDialog: boolean;    
@@ -23,16 +24,26 @@ export class RecordTableComponent implements OnInit {
     constructor(private recordService: RecordService) { }  
     
     ngOnInit() {
-        this.keyColumns = [
-            {field: 'rootEntityKey1', header: 'Key 1', sortable: true},
-            {field: 'rootEntityKey2', header: 'Key 2', sortable: true},
-            {field: 'rootEntityKey3', header: 'Key 3', sortable: true}
-        ];
+        this.initTable();
+    }
+
+    ngOnChanges(changes: any) {
+        this.initTable();
+    }
+    
+    initTable() {
+        console.log('init record table');
+        this.keyColumns = [];
+        let rootEntity = this.survey.schema.getDefaultRootEntity();
+        console.log(rootEntity);
+        rootEntity.children.forEach(function(entity, idx) {
+            this.keyColumns.push({field: 'rootEntityKey' + (idx+1), header: entity.label, sortable: true});
+        });
     } 
     
     loadRecordsLazy(event: LazyLoadEvent) {
-        let surveyId = 1;
-        let rootEntityDefId = 1;
+        let surveyId = this.survey.id;
+        let rootEntityDefId = this.survey.schema.getDefaultRootEntity().id;
         
         this.recordService.getRecordsCount(surveyId, rootEntityDefId)
             .subscribe(totalRecords => this.totalRecords = totalRecords);

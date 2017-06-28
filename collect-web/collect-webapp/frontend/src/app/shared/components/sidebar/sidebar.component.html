@@ -3,7 +3,9 @@
         <a routerLink="/home-page" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-home"></i>&nbsp;{{ 'home-page' | translate }}
         </a>
-        <p-dropdown ></p-dropdown>
+        
+        <app-survey-selector ></app-survey-selector>
+        
         <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;{{ 'dashboard' | translate }}
         </a>

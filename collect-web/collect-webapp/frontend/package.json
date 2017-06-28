@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prod": "ng build --prod --base-href /collect/ng2/ --output-path ../src/main/webapp/ng2"
+    "prod": "ng build --prod --base-href /collect/ng/ --output-path dist"
   },
   "private": true,
   "dependencies": {
@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "@angular/cli": "1.0.4",
-    "@angular/compiler-cli": "^4.0.0",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
     "codelyzer": "~2.0.0",

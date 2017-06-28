@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
+import { Injectable, Component, OnInit } from '@angular/core';
+import { SurveyService } from 'app/shared/services';
 
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
     isActive = false;
     showMenu = '';
+    
+    constructor() { };
+    
+    ngOnInit() { }
+    
     eventCalled() {
         this.isActive = !this.isActive;
     }

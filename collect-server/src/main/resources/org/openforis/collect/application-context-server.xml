@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx" 
-	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
 	xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
-    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd"
+	    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+	    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
 	default-lazy-init="true"
 	default-autowire="byName">
 	
@@ -35,7 +34,7 @@
 	<bean id="volatileRecordIndexManager"
 		class="org.openforis.collect.remoting.service.recordindex.VolatileRecordIndexManager"
 		init-method="init" scope="session" lazy-init="false" autowire="byName" />
-	<bean id="userManager" 			class="org.openforis.collect.manager.ClientUserManager" />
+<!-- 	<bean id="userManager" 			class="org.openforis.collect.manager.ClientUserManager" /> -->
 	
 	<!-- ===================================== -->
 	<!-- GraniteDs services -->
@@ -97,12 +96,6 @@
 <!-- 		<property name="registryPort" value="1099" /> -->
 <!-- 	</bean> -->
 		
-	<!-- ===================================== -->
-	<!-- Security -->
-	<!-- ===================================== -->
-	
-	<bean id="userDetailsService"	class="org.openforis.collect.security.CollectUserDetailsService" />
-	
 	<!-- Survey Context -->
 	<bean id="coordinateOperations" class="org.openforis.collect.geospatial.GeoToolsCoordinateOperations"
 		init-method="initialize" />

@@ -1,0 +1,9 @@
+<p-dropdown [options]="options" [(ngModel)]="selectedSurvey"
+        		placeholder="{{ 'select-a-survey' | translate }}"
+        		[style]="{'width':'200px'}" (onChange)="onSurveyChange($event)">
+	<ng-template let-survey pTemplate="item">
+		<div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+			<div style="font-size:14px;margin-top:4px">{{survey.label}}</div>
+		</div>
+	</ng-template>
+</p-dropdown>
