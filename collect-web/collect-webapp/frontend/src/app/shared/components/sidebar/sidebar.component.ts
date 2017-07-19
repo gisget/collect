@@ -1,5 +1,4 @@
 import { Injectable, Component, OnInit } from '@angular/core';
-import { SurveyService } from 'app/shared/services';
 
 @Component({
     selector: 'app-sidebar',

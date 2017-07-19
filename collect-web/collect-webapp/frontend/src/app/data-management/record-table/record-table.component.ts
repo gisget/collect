@@ -1,9 +1,9 @@
-import { Component, ViewChild, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, ViewChild, OnInit, Input } from '@angular/core';
 
 import { LazyLoadEvent }    from 'primeng/components/common/api';
-import { DataTableModule }  from 'primeng/primeng';
+import { DataTableModule, DataTable }  from 'primeng/primeng';
 
-import { RecordSummary, Survey } from 'app/shared/model';
+import { RecordSummary, Survey, AttributeDefinition } from 'app/shared/model';
 import { RecordService }    from 'app/shared/services';
 
 @Component({
@@ -11,12 +11,15 @@ import { RecordService }    from 'app/shared/services';
     templateUrl: './record-table.component.html',
     styleUrls: ['./record-table.component.scss']
 })
-export class RecordTableComponent implements OnInit, OnChanges {
-    @Input() survey: Survey;
+export class RecordTableComponent implements OnInit {
+    _survey: Survey;
     
-    records: RecordSummary[]; 
+     @ViewChild('dt') dt: DataTable;
+    
+    loading: boolean = false;
+    records: RecordSummary[] = null; 
     displayDialog: boolean;    
-    selectedRecords: RecordSummary[];    
+    selectedRecords: RecordSummary[] = null;    
     newRecord: boolean;
     totalRecords: number = 0;
     keyColumns: any[];
@@ -26,31 +29,57 @@ export class RecordTableComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.initTable();
     }
-
-    ngOnChanges(changes: any) {
-        this.initTable();
+    
+    get survey(): Survey {
+        return this._survey;
     }
     
+    @Input()
+    set survey(survey: Survey) {
+        this._survey = survey;
+        this.initTable();
+    }
+
     initTable() {
         console.log('init record table');
-        this.keyColumns = [];
-        let rootEntity = this.survey.schema.getDefaultRootEntity();
-        console.log(rootEntity);
-        rootEntity.children.forEach(function(entity, idx) {
-            this.keyColumns.push({field: 'rootEntityKey' + (idx+1), header: entity.label, sortable: true});
-        });
+        let keyColumns = [];
+        if (this.survey) {
+            let rootEntity = this.survey.schema.defaultRootEntity;
+            rootEntity.keyAttributeDefinitions.forEach(function(keyAttrDef, idx) {
+                keyColumns.push({field: keyAttrDef.id, header: keyAttrDef.label, sortable: true});
+            });
+        }
+        this.keyColumns = keyColumns;
+        this.dt.reset();
     } 
     
     loadRecordsLazy(event: LazyLoadEvent) {
-        let surveyId = this.survey.id;
-        let rootEntityDefId = this.survey.schema.getDefaultRootEntity().id;
+        if (this.survey) {
+            let $this = this;
+            this.loading = true;
+            let surveyId = this.survey.id;
+            let rootEntityDefId = this.survey.schema.defaultRootEntity.id;
+            
+            this.recordService.getRecordsCount(surveyId, rootEntityDefId)
+                .subscribe(totalRecords => this.totalRecords = totalRecords);
+            
+            let firstKeyAttrDef: AttributeDefinition = this.survey.schema.defaultRootEntity.keyAttributeDefinitions[0];
+            
+            this.recordService.getRecordSummaries(surveyId, rootEntityDefId, 
+                    event.first, event.rows, 
+                    event.sortField ? parseInt(event.sortField) : firstKeyAttrDef.id, 
+                    event.sortOrder)
+                .subscribe(recordLoadResult => {
+                    console.log(recordLoadResult["records"]);
+                    $this.records = recordLoadResult["records"];
+                    $this.loading = false;
+                });
+        } else {
+            this.records = null;
+        }
+    }
+    
+    recordsLoaded(recordLoadResult:Object) {
         
-        this.recordService.getRecordsCount(surveyId, rootEntityDefId)
-            .subscribe(totalRecords => this.totalRecords = totalRecords);
-        
-        this.recordService.getRecordSummaries(surveyId, rootEntityDefId, 
-                event.first, event.rows, 
-                event.sortField ? event.sortField : "rootEnityKey1", event.sortOrder)
-            .subscribe(records => this.records = records);
     }
 }

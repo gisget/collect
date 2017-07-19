@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Injectable, Component, OnInit } from '@angular/core';
 
 import { SurveyService } from 'app/shared';
 
@@ -9,7 +9,10 @@ import { SurveyService } from 'app/shared';
 })
 export class DataManagementComponent implements OnInit {
 
-    constructor(private surveyService: SurveyService) {
+    surveyService: SurveyService;
+    
+    constructor(private _surveyService: SurveyService) {
+        this.surveyService = _surveyService;
     }
     ngOnInit() {}
 }

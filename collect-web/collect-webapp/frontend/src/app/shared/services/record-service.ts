@@ -26,16 +26,16 @@ export class RecordService extends AbstractService {
     
     getRecordSummaries(surveyId : number, rootEntityDefId : number, 
             offset : number, maxNumberOfRecords : number,
-            sortField : string, sortOrder : number)
+            sortFieldId : number, sortOrder : number)
             : Observable<RecordSummary[]> {
         let url = this.contextPath + 'survey/' + surveyId + '/data/records/summary.json';
 
         let params = new URLSearchParams();
         params.set('rootEntityDefinitionId', rootEntityDefId.toString());
-        params.set('offset', offset.toString());
-        params.set('maxNumberOfRecords', maxNumberOfRecords.toString());
-        params.set('sortField', sortField);
-        params.set('sortOrder', sortOrder.toString());
+        params.set('params.offset', offset.toString());
+        params.set('params.maxNumberOfRows', maxNumberOfRecords.toString());
+//        params.set('params.sortFields', sortFields);
+//        params.set('sortOrder', sortOrder.toString());
         
         return this.http.get(url, { search : params })
                     .map(res => res.json() as RecordSummary[])

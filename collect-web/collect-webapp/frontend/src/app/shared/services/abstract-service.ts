@@ -8,7 +8,7 @@ export class AbstractService {
     protected http: Http;
     
     constructor(injector: Injector) {
-        this.contextPath = 'http://127.0.0.1:8380/collect/';
+        this.contextPath = 'http://127.0.0.1:8480/collect/';
         this.http = injector.get(Http);
     } 
     

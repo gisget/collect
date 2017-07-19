@@ -230,22 +230,22 @@ public class RecordController extends BasicController implements Serializable {
 
 	public static class SearchParameters {
 		
-		private int offset;
-		private int maxNumberOfRows;
+		private Integer offset;
+		private Integer maxNumberOfRows;
 		
-		public int getOffset() {
+		public Integer getOffset() {
 			return offset;
 		}
 
-		public void setOffset(int offset) {
+		public void setOffset(Integer offset) {
 			this.offset = offset;
 		}
 
-		public int getMaxNumberOfRows() {
+		public Integer getMaxNumberOfRows() {
 			return maxNumberOfRows;
 		}
 
-		public void setMaxNumberOfRows(int maxNumberOfRows) {
+		public void setMaxNumberOfRows(Integer maxNumberOfRows) {
 			this.maxNumberOfRows = maxNumberOfRows;
 		}
 	}

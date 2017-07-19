@@ -12,9 +12,9 @@
 	<packaging>war</packaging>
 	
 	<properties>
-		<node.version>v7.10.0</node.version>
-		<npm.version>5.0.4</npm.version>
-		<angular-cli.version>1.0.4</angular-cli.version>
+		<node.version>v8.0.0</node.version>
+		<npm.version>5.3.0</npm.version>
+		<angular-cli.version>1.2.1</angular-cli.version>
 	</properties>
 	
 	<build>
