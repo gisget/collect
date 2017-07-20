@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 
 !.angular-cli.json
+/package-lock.json
