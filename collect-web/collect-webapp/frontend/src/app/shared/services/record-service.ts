@@ -1,9 +1,10 @@
 import { Injectable, Injector }       from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { Http, Response, Jsonp, URLSearchParams }   from '@angular/http'; 
 import { Observable }       from 'rxjs/Rx';
 
 import { AbstractService } from 'app/shared/services';
-import { RecordSummary }   from 'app/shared/model';
+import { Record, RecordSummary }   from 'app/shared/model';
 
 @Injectable()
 export class RecordService extends AbstractService {
@@ -24,22 +25,34 @@ export class RecordService extends AbstractService {
                     .catch(this.handleError);
     }
     
-    getRecordSummaries(surveyId : number, rootEntityDefId : number, 
-            offset : number, maxNumberOfRecords : number,
-            sortFieldId : number, sortOrder : number)
+    getRecordSummaries(surveyId : number, rootEntityName : string, 
+            offset : number, maxNumberOfRows : number,
+            sortField : string, descendingOrder : boolean)
             : Observable<RecordSummary[]> {
         let url = this.contextPath + 'survey/' + surveyId + '/data/records/summary.json';
 
+        
         let params = new URLSearchParams();
-        params.set('rootEntityDefinitionId', rootEntityDefId.toString());
-        params.set('params.offset', offset.toString());
-        params.set('params.maxNumberOfRows', maxNumberOfRecords.toString());
-//        params.set('params.sortFields', sortFields);
-//        params.set('sortOrder', sortOrder.toString());
+        params.append("offset", offset.toString());
+        params.append("maxNumberOfRows", maxNumberOfRows.toString());
+        params.append("rootEntityName", rootEntityName);
+        params.append("sortFields[0].field", sortField);
+        params.append("sortFields[0].descending", String(descendingOrder));
         
         return this.http.get(url, { search : params })
                     .map(res => res.json() as RecordSummary[])
                     .catch(this.handleError);
     }
     
+    createNewRecord(surveyId: number, rootEntityId: number, versionId: number, userId: number) {
+        let url = this.contextPath + 'survey/' + surveyId + '/data/records';
+        let params = {
+            rootEntityId: rootEntityId,
+            versionId: versionId,
+            userId: userId
+        };
+        return this.http.post(url, params)
+                    .map(res => res.json() as Record)
+                    .catch(this.handleError);
+    }
 }

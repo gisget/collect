@@ -1,2 +1,8 @@
-<h2 class="text-muted">{{ 'record-list' | translate }}</h2>
+<h2 class="text-muted">{{ 'data-management' | translate }}</h2>
+
+<p-menubar>
+    <button pButton label="New" icon="fa-plus-square" (click)="onNewClick()"></button>
+    <input type="text" pInputText placeholder="Search">
+</p-menubar>
+
 <app-record-table [survey]=surveyService.preferredSurvey></app-record-table>

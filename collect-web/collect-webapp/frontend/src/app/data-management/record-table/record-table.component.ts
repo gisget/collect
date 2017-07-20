@@ -12,9 +12,9 @@ import { RecordService }    from 'app/shared/services';
     styleUrls: ['./record-table.component.scss']
 })
 export class RecordTableComponent implements OnInit {
-    _survey: Survey;
+    @ViewChild('dt') dt: DataTable;
     
-     @ViewChild('dt') dt: DataTable;
+    _survey: Survey;
     
     loading: boolean = false;
     records: RecordSummary[] = null; 
@@ -41,12 +41,11 @@ export class RecordTableComponent implements OnInit {
     }
 
     initTable() {
-        console.log('init record table');
         let keyColumns = [];
         if (this.survey) {
             let rootEntity = this.survey.schema.defaultRootEntity;
             rootEntity.keyAttributeDefinitions.forEach(function(keyAttrDef, idx) {
-                keyColumns.push({field: keyAttrDef.id, header: keyAttrDef.label, sortable: true});
+                keyColumns.push({field: 'KEY'+(idx+1), keyIndex: idx, header: keyAttrDef.label, sortable: true});
             });
         }
         this.keyColumns = keyColumns;
@@ -55,31 +54,40 @@ export class RecordTableComponent implements OnInit {
     
     loadRecordsLazy(event: LazyLoadEvent) {
         if (this.survey) {
-            let $this = this;
             this.loading = true;
             let surveyId = this.survey.id;
-            let rootEntityDefId = this.survey.schema.defaultRootEntity.id;
+            let rootEntityDef = this.survey.schema.defaultRootEntity;
             
-            this.recordService.getRecordsCount(surveyId, rootEntityDefId)
+            this.recordService.getRecordsCount(surveyId, rootEntityDef.id)
                 .subscribe(totalRecords => this.totalRecords = totalRecords);
             
-            let firstKeyAttrDef: AttributeDefinition = this.survey.schema.defaultRootEntity.keyAttributeDefinitions[0];
+            let sortField;
+            if (event.sortField) {
+                switch(event.sortField) {
+                    case "creationDate":
+                        sortField = "DATE_CREATED";
+                        break;
+                    case "modifiedDate":
+                        sortField = "DATE_MODIFIED";
+                        break;
+                    default:
+                        sortField = "KEY1";
+                }
+            } else {
+                sortField = "KEY1";
+            }
             
-            this.recordService.getRecordSummaries(surveyId, rootEntityDefId, 
+            this.recordService.getRecordSummaries(surveyId, rootEntityDef.name, 
                     event.first, event.rows, 
-                    event.sortField ? parseInt(event.sortField) : firstKeyAttrDef.id, 
-                    event.sortOrder)
-                .subscribe(recordLoadResult => {
-                    console.log(recordLoadResult["records"]);
-                    $this.records = recordLoadResult["records"];
-                    $this.loading = false;
-                });
+                    sortField, event.sortOrder < 0)
+                .subscribe(this.recordsLoaded.bind(this));
         } else {
             this.records = null;
         }
     }
     
     recordsLoaded(recordLoadResult:Object) {
-        
+        this.records = recordLoadResult["records"];
+        this.loading = false;
     }
 }

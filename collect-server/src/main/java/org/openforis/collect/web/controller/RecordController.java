@@ -167,7 +167,20 @@ public class RecordController extends BasicController implements Serializable {
 		CollectRecord record = recordManager.load(survey, recordId, Step.valueOf(stepNumber));
 		return toProxy(record);
 	}
-
+	
+	@Transactional
+	@RequestMapping(value = "survey/{surveyId}/data/records", method=POST, consumes=APPLICATION_JSON_VALUE)
+	public @ResponseBody
+	RecordProxy createRecord(@PathVariable int surveyId, @RequestBody Parameters params) throws RecordPersistenceException {
+		CollectSurvey survey = surveyManager.getOrLoadSurveyById(surveyId);
+		EntityDefinition rootEntityDefinition = params.getRootEntityId() == null ? survey.getSchema().getFirstRootEntityDefinition(): 
+			survey.getSchema().getRootEntityDefinition(params.getRootEntityId());
+		String modelVersionName = params.getVersionId() == null ? null : survey.getVersionById(params.getVersionId()).getName();
+		User user = userManager.loadById(params.getUserId());
+		CollectRecord record = recordManager.create(survey, rootEntityDefinition, user, modelVersionName, null);
+		return new RecordProxy(record, new ProxyContext(Locale.ENGLISH, messageSource, surveyContext), true);
+	}
+	
 	@Transactional
 	@RequestMapping(value = "survey/{surveyId}/data/records/random.json", method=POST, consumes=APPLICATION_JSON_VALUE)
 	public @ResponseBody

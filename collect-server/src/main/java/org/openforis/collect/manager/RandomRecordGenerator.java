@@ -205,6 +205,8 @@ public class RandomRecordGenerator {
 		
 		private int userId;
 		private boolean addSecondLevelEntities = false;
+		private Integer rootEntityId; //optional: default to first root entity
+		private Integer versionId; //optional: default to last version
 
 		public int getUserId() {
 			return userId;
@@ -220,6 +222,22 @@ public class RandomRecordGenerator {
 
 		public void setAddSecondLevelEntities(boolean addSecondLevelEntities) {
 			this.addSecondLevelEntities = addSecondLevelEntities;
+		}
+
+		public Integer getRootEntityId() {
+			return rootEntityId;
+		}
+
+		public void setRootEntityId(Integer rootEntityId) {
+			this.rootEntityId = rootEntityId;
+		}
+
+		public Integer getVersionId() {
+			return versionId;
+		}
+
+		public void setVersionId(Integer versionId) {
+			this.versionId = versionId;
 		}
 	}
 }

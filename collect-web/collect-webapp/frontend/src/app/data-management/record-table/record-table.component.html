@@ -6,7 +6,11 @@
         sortField="modifiedDate" sortOrder="1"
         [responsive]="true">
 <!--     <header>Records</header> -->
-	<p-column *ngFor="let keyCol of keyColumns" [field]="keyCol.field" [header]="keyCol.header" [sortable]="keyCol.sortable"></p-column>
+	<p-column *ngFor="let keyCol of keyColumns" [field]="keyCol.field" [header]="keyCol.header" [sortable]="keyCol.sortable">
+		<ng-template let-data="rowData" pTemplate="body">
+            <span>{{data.rootEntityKeys[keyCol.keyIndex]}}</span>
+        </ng-template>
+	</p-column>
     <p-column field="creationDate" header="Created on" [sortable]="true">
     	<ng-template let-data="rowData" pTemplate="body">
             <span>{{data.creationDate | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
@@ -17,5 +21,5 @@
             <span>{{data.modifiedDate | date: 'dd/MM/yyyy HH:mm:ss'}}</span>
         </ng-template>
     </p-column>
-	<footer>There are {{totalRecords}} records</footer>
+	<p-footer>There are {{totalRecords}} records</p-footer>
 </p-dataTable>
