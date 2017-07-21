@@ -1,4 +1,5 @@
-<p-dataTable #dt [value]="records" [(selection)]="selectedRecords" selectionMode="multiple" 
+<p-dataTable #dt [value]="records" [(selection)]="selectedRecords" selectionMode="multiple"
+		(onRowDblclick)="editRecord($event.data)" 
 		[lazy]="true" (onLazyLoad)="loadRecordsLazy($event)" 
 		[loading]="loading" loadingIcon="fa-spinner" 
 		[rows]="20" [paginator]="true" [rowsPerPageOptions]="[10, 20, 50, 100]" [pageLinks]="10"

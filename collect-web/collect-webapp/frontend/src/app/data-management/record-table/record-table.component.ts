@@ -1,13 +1,14 @@
 import { Component, ViewChild, OnInit, Input } from '@angular/core';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 import { LazyLoadEvent }    from 'primeng/components/common/api';
 import { DataTableModule, DataTable }  from 'primeng/primeng';
 
-import { RecordSummary, Survey, AttributeDefinition } from 'app/shared/model';
+import { Record, RecordSummary, Survey } from 'app/shared/model';
 import { RecordService }    from 'app/shared/services';
 
 @Component({
-    selector: 'app-record-table',
+    selector: 'ofc-record-table',
     templateUrl: './record-table.component.html',
     styleUrls: ['./record-table.component.scss']
 })
@@ -24,7 +25,7 @@ export class RecordTableComponent implements OnInit {
     totalRecords: number = 0;
     keyColumns: any[];
     
-    constructor(private recordService: RecordService) { }  
+    constructor(private router: Router,  private route: ActivatedRoute, private recordService: RecordService) { }  
     
     ngOnInit() {
         this.initTable();
@@ -89,5 +90,9 @@ export class RecordTableComponent implements OnInit {
     recordsLoaded(recordLoadResult:Object) {
         this.records = recordLoadResult["records"];
         this.loading = false;
+    }
+    
+    editRecord(record:Record) {
+        this.router.navigate([record.id], { relativeTo: this.route });
     }
 }

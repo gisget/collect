@@ -1,15 +1,28 @@
 import { Serializable } from './serializable.model';
+import { UIConfiguration } from './ui/ui-configuration.model';
+
+export class SurveyObject extends Serializable {
+    id: number;
+    
+    constructor(id: number) {
+        super();
+        this.id = id;
+    }
+}    
 
 export class Survey extends Serializable {
     id: number;
     name: string;
     uri: string;
     schema: Schema;
+    uiConfiguration: UIConfiguration;
     
     fillFromJSON(jsonObj) {
         super.fillFromJSON(jsonObj);
         this.schema = new Schema();
         this.schema.fillFromJSON(jsonObj.schema);
+        this.uiConfiguration = new UIConfiguration(this);
+        this.uiConfiguration.fillFromJSON(jsonObj.uiConfiguration);
     }
 }
 
@@ -22,7 +35,7 @@ export class Schema extends Serializable {
         this.rootEntities = [];
         for (var i = 0; i < jsonObj.rootEntities.length; i++) {
             var rootEntityJsonObj = jsonObj.rootEntities[i];
-            var rootEntity = new EntityDefinition(null);
+            var rootEntity = new EntityDefinition(rootEntityJsonObj.id, null);
             rootEntity.fillFromJSON(rootEntityJsonObj);
             this.rootEntities.push(rootEntity);
         }
@@ -33,18 +46,14 @@ export class Schema extends Serializable {
     }
 }
 
-export class SurveyObject extends Serializable {
-    id: number;
-}    
-
 export class NodeDefinition extends SurveyObject {
     parent: EntityDefinition;
     name: string;
     label: string;
     multiple: boolean;
     
-    constructor(parent: EntityDefinition) {
-        super();
+    constructor(id: number, parent: EntityDefinition) {
+        super(id);
         this.parent = parent;
     }
 }
@@ -52,8 +61,8 @@ export class NodeDefinition extends SurveyObject {
 export class EntityDefinition extends NodeDefinition {
     children: Array<NodeDefinition>
     
-    constructor(parent: EntityDefinition) {
-        super(parent);
+    constructor(id: number, parent: EntityDefinition) {
+        super(id, parent);
     }
     
     fillFromJSON(jsonObj) {
@@ -62,7 +71,12 @@ export class EntityDefinition extends NodeDefinition {
         this.children = [];
         for (var i = 0; i < jsonObj.children.length; i++) {
             var nodeJsonObj = jsonObj.children[i];
-            var nodeDef = nodeJsonObj.type == 'ENTITY' ? new EntityDefinition(this): new AttributeDefinition(this);
+            let nodeDef;
+            if (nodeJsonObj.type == 'ENTITY') { 
+                nodeDef = new EntityDefinition(nodeJsonObj.id, this);
+            } else {
+                nodeDef = new AttributeDefinition(nodeJsonObj.id, this);
+            }
             nodeDef.fillFromJSON(nodeJsonObj);
             this.children.push(nodeDef);
         }
@@ -96,7 +110,7 @@ export class EntityDefinition extends NodeDefinition {
 export class AttributeDefinition extends NodeDefinition {
     key: boolean;
     
-    constructor(parent: EntityDefinition) {
-        super(parent);
+    constructor(id: number, parent: EntityDefinition) {
+        super(id, parent);
     }
 }

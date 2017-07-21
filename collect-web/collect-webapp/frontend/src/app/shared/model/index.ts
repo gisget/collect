@@ -1,3 +1,4 @@
+export * from './identifiable.model';
 export * from './record.model';
 export * from './record-summary.model';
 export * from './serializable.model';

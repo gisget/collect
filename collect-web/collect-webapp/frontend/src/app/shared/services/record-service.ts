@@ -55,4 +55,11 @@ export class RecordService extends AbstractService {
                     .map(res => res.json() as Record)
                     .catch(this.handleError);
     }
+    
+    loadRecord(surveyId: number, recordId: number) {
+        let url = this.contextPath + 'survey/' + surveyId + '/data/records/' + recordId + '/content.json';
+        return this.http.get(url)
+                    .map(res => res.json() as Record)
+                    .catch(this.handleError);
+    }
 }

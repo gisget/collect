@@ -6,9 +6,24 @@ const routes: Routes = [
     {
         path: '', component: LayoutComponent,
         children: [
-            { path: 'home-page', loadChildren: '../home-page/home-page.module#HomePageModule' },
-            { path: 'dashboard', loadChildren: '../dashboard/dashboard.module#DashboardModule' },
-            { path: 'data-management', loadChildren: '../data-management/data-management.module#DataManagementModule' }
+            { 
+                path: 'home-page', 
+                loadChildren: '../home-page/home-page.module#HomePageModule'
+            },
+            { 
+                path: 'dashboard', 
+                loadChildren: '../dashboard/dashboard.module#DashboardModule',
+                data: {
+                    breadcrumb: "Dashboard"
+                }
+           },
+            { 
+                path: 'data-management', 
+                loadChildren: '../data-management/data-management.module#DataManagementModule',
+                data: {
+                    breadcrumb: "Data Management"
+                }
+            }
         ]
     }
 ];

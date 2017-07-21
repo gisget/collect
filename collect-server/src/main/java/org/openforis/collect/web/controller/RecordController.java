@@ -178,6 +178,7 @@ public class RecordController extends BasicController implements Serializable {
 		String modelVersionName = params.getVersionId() == null ? null : survey.getVersionById(params.getVersionId()).getName();
 		User user = userManager.loadById(params.getUserId());
 		CollectRecord record = recordManager.create(survey, rootEntityDefinition, user, modelVersionName, null);
+		recordManager.save(record);
 		return new RecordProxy(record, new ProxyContext(Locale.ENGLISH, messageSource, surveyContext), true);
 	}
 	
