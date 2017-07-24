@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
-import { TabSet } from 'app/shared/model/ui/tabset.model';
-import { Tab } from 'app/shared/model/ui/tab.model';
+import { TabSetDefinition } from 'app/shared/model/ui/tabset-definition.model';
+import { TabDefinition } from 'app/shared/model/ui/tab-definition.model';
 
 @Component({
     selector: 'ofc-tabset',
@@ -9,7 +9,7 @@ import { Tab } from 'app/shared/model/ui/tab.model';
 })
 export class TabSetComponent {
 
-    @Input() tabSet: TabSet;
+    @Input() tabSet: TabSetDefinition;
 
     constructor() { }
 

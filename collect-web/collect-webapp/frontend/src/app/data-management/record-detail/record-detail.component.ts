@@ -3,10 +3,10 @@ import { ActivatedRoute } from "@angular/router";
 
 import { TabViewModule } from 'primeng/primeng';
 
-import { Record } from 'app/shared/model';
-import { TabSet } from 'app/shared/model/ui/tabset.model';
-
 import { RecordService, SurveyService } from 'app/shared/services';
+
+import { Record } from 'app/shared/model';
+import { TabSetDefinition } from 'app/shared/model/ui/tabset-definition.model';
 
 import { TabSetComponent } from './tabset/tabset.component';
 import { TabComponent } from './tab/tab.component';
@@ -19,7 +19,7 @@ import { TabComponent } from './tab/tab.component';
 export class RecordDetailComponent implements OnInit {
 
     _record: Record;
-    tabSet: TabSet = null;
+    tabSet: TabSetDefinition = null;
     
     constructor(private recordService: RecordService, private surveyService: SurveyService, 
         private route: ActivatedRoute) { }
@@ -28,10 +28,12 @@ export class RecordDetailComponent implements OnInit {
         const id = +this.route.snapshot.params["id"];
         let survey = this.surveyService.preferredSurvey;
         
-        this.tabSet = survey.uiConfiguration.mainTabSet;
-        
-        let surveyId: number = survey.id;
-        this.recordService.loadRecord(surveyId, id).subscribe(record => this.record = record);
+        if (survey != null) {
+            this.tabSet = survey.uiConfiguration.mainTabSet;
+            
+            let surveyId: number = survey.id;
+            this.recordService.loadRecord(surveyId, id).subscribe(record => this.record = record);
+        }
     }
     
     get record(): Record {

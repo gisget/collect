@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Tab } from 'app/shared/model/ui/tab.model';
+import { TabDefinition } from 'app/shared/model/ui/tab-definition.model';
 
 @Component({
     selector: 'ofc-tab',
@@ -8,7 +8,7 @@ import { Tab } from 'app/shared/model/ui/tab.model';
 })
 export class TabComponent {
 
-    @Input() tab: Tab;
+    @Input() tab: TabDefinition;
 
     constructor() { }
 

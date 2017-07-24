@@ -1,0 +1,5 @@
+<div *ngIf="isFieldset() then fieldset else inputField"></div>
+
+<ng-template #fieldset><ofc-fieldset [fieldsetDefinition]="itemDefinition"></ofc-fieldset></ng-template>
+<ng-template #inputField>{{itemDefinition.label}}</ng-template>
+

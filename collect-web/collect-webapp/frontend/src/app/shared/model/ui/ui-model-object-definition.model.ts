@@ -1,26 +1,26 @@
 import { Identifiable } from '../identifiable.model';
 import { Serializable } from '../serializable.model';
 import { UIConfiguration } from './ui-configuration.model';
-import { TabSet } from './tabset.model';
+import { TabSetDefinition } from './tabset-definition.model';
 import { Survey } from '../survey.model';
 
-export class UIModelObject extends Serializable implements Identifiable {
-    parent: UIModelObject;
+export class UIModelObjectDefinition extends Serializable implements Identifiable {
+    parent: UIModelObjectDefinition;
     id: number;
     hidden: boolean;
     
-    constructor(id: number, parent: UIModelObject) {
+    constructor(id: number, parent: UIModelObjectDefinition) {
         super();
         this.id = id;
         this.parent = parent;
     }
     
-    get rootTabSet(): TabSet {
-        var currentParent: UIModelObject = this.parent;
+    get rootTabSet(): TabSetDefinition {
+        var currentParent: UIModelObjectDefinition = this.parent;
         while (currentParent != null) {
             currentParent = currentParent.parent;
         }
-        return <TabSet>currentParent;
+        return <TabSetDefinition>currentParent;
     }
     
     get uiConfiguration():UIConfiguration {
