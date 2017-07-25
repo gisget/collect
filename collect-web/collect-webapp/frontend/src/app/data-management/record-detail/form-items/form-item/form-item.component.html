@@ -1,0 +1,16 @@
+<div *ngIf="isFieldset() then fieldset else inputField"></div>
+
+<ng-template #fieldset>
+	<ofc-fieldset [fieldsetDefinition]="itemDefinition"></ofc-fieldset>
+</ng-template>
+<ng-template #inputField>
+	<span>{{itemDefinition.label}}</span>
+	<div ng-switch="fieldType">
+		<div ng-switch-when="TEXT" class="text">
+			<ofc-text-field [fieldDefinition]="itemDefinition"></ofc-text-field>
+		</div>
+		<div ng-switch-default class="boh">
+		</div>
+	</div>
+</ng-template>
+

@@ -9,8 +9,8 @@ import { DataManagementRoutingModule }  from './data-management-routing.module';
 import { DataManagementComponent }      from './data-management.component';
 import { RecordTableComponent }         from './record-table/record-table.component';
 import { RecordDetailComponent }         from './record-detail/record-detail.component';
-import { FieldsetComponent, FormItemsComponent, FormItemComponent, 
-        TabSetComponent, TabComponent } from './record-detail';
+import { FieldsetComponent, FormItemComponent, FormItemsComponent, 
+    TabSetComponent, TabComponent, TextFieldComponent } from './record-detail';
 
 @NgModule({
     imports: [
@@ -23,7 +23,7 @@ import { FieldsetComponent, FormItemsComponent, FormItemComponent,
         DataManagementComponent,
         RecordTableComponent,
         RecordDetailComponent,
-        FieldsetComponent, FormItemsComponent, FormItemComponent, TabSetComponent, TabComponent
+        FieldsetComponent, FormItemsComponent, FormItemComponent, TabSetComponent, TabComponent, TextFieldComponent
     ]
 })
 export class DataManagementModule { }

@@ -4,7 +4,7 @@ import { Http, Response, Jsonp, URLSearchParams }   from '@angular/http';
 import { Observable }       from 'rxjs/Rx';
 
 import { AbstractService } from 'app/shared/services';
-import { Record, RecordSummary }   from 'app/shared/model';
+import { Record, RecordSummary, Survey }   from 'app/shared/model';
 
 @Injectable()
 export class RecordService extends AbstractService {
@@ -56,10 +56,14 @@ export class RecordService extends AbstractService {
                     .catch(this.handleError);
     }
     
-    loadRecord(surveyId: number, recordId: number) {
-        let url = this.contextPath + 'survey/' + surveyId + '/data/records/' + recordId + '/content.json';
+    loadRecord(survey: Survey, recordId: number) {
+        let url = this.contextPath + 'survey/' + survey.id + '/data/records/' + recordId + '/content.json';
         return this.http.get(url)
-                    .map(res => res.json() as Record)
+                    .map(res => {
+                        let record = new Record(survey);
+                        record.fillFromJSON(res.json());
+                        return record;
+                    })
                     .catch(this.handleError);
     }
 }

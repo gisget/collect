@@ -31,8 +31,7 @@ export class RecordDetailComponent implements OnInit {
         if (survey != null) {
             this.tabSet = survey.uiConfiguration.mainTabSet;
             
-            let surveyId: number = survey.id;
-            this.recordService.loadRecord(surveyId, id).subscribe(record => this.record = record);
+            this.recordService.loadRecord(survey, id).subscribe(record => this.record = record);
         }
     }
     

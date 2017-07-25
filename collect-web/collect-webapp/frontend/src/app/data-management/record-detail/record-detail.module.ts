@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RecordDetailComponent } from './record-detail.component';
 import { TabSetComponent } from './tabset/tabset.component';
 import { TabComponent } from './tab/tab.component';
+import { TextFieldComponent } from './form-items/text-field/text-field.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { TabComponent } from './tab/tab.component';
     declarations: [
         RecordDetailComponent,
         TabSetComponent,
-        TabComponent
+        TabComponent,
+        TextFieldComponent
     ]
 })
 export class RecordDetailModule { }
