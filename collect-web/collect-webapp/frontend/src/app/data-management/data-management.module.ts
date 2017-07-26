@@ -10,7 +10,7 @@ import { DataManagementComponent }      from './data-management.component';
 import { RecordTableComponent }         from './record-table/record-table.component';
 import { RecordDetailComponent }         from './record-detail/record-detail.component';
 import { FieldsetComponent, FormItemComponent, FormItemsComponent, 
-    TabSetComponent, TabComponent, TextFieldComponent } from './record-detail';
+    TabSetComponent, TabComponent, TextFieldComponent, CodeFieldComponent } from './record-detail';
 
 @NgModule({
     imports: [
@@ -23,7 +23,8 @@ import { FieldsetComponent, FormItemComponent, FormItemsComponent,
         DataManagementComponent,
         RecordTableComponent,
         RecordDetailComponent,
-        FieldsetComponent, FormItemsComponent, FormItemComponent, TabSetComponent, TabComponent, TextFieldComponent
+        CodeFieldComponent, FieldsetComponent, FormItemsComponent, FormItemComponent, TabSetComponent, TabComponent, 
+            TextFieldComponent
     ]
 })
 export class DataManagementModule { }

@@ -5,12 +5,10 @@
 </ng-template>
 <ng-template #inputField>
 	<span>{{itemDefinition.label}}</span>
-	<div ng-switch="fieldType">
-		<div ng-switch-when="TEXT" class="text">
-			<ofc-text-field [fieldDefinition]="itemDefinition"></ofc-text-field>
-		</div>
-		<div ng-switch-default class="boh">
-		</div>
+	<div [ngSwitch]="attributeType">
+		<ofc-code-field *ngSwitchCase="CODE" [fieldDefinition]="itemDefinition"></ofc-code-field>
+		<ofc-text-field *ngSwitchCase="TEXT" [fieldDefinition]="itemDefinition"></ofc-text-field>
+		<div *ngSwitchDefault>Type not supported</div>
 	</div>
 </ng-template>
 

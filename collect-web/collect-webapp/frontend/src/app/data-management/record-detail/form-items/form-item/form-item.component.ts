@@ -26,7 +26,7 @@ export class FormItemComponent implements OnInit {
     get attributeType():string {
         if (this.itemDefinition instanceof FieldDefinition) {
             let attrDef: AttributeDefinition = this.itemDefinition.attributeDefinition;
-            return attrDef.type;
+            return attrDef.attributeType;
         } else {
             return null;
         } 

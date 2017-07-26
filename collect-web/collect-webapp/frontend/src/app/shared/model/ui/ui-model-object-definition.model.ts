@@ -16,11 +16,11 @@ export class UIModelObjectDefinition extends Serializable implements Identifiabl
     }
     
     get rootTabSet(): TabSetDefinition {
-        var currentParent: UIModelObjectDefinition = this.parent;
-        while (currentParent != null) {
-            currentParent = currentParent.parent;
+        let currentObj: UIModelObjectDefinition = this;
+        while (currentObj.parent != null) {
+            currentObj = currentObj.parent;
         }
-        return <TabSetDefinition>currentParent;
+        return <TabSetDefinition>currentObj;
     }
     
     get uiConfiguration():UIConfiguration {

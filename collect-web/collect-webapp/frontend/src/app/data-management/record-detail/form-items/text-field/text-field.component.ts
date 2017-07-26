@@ -1,20 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
-
-import { FieldDefinition } from 'app/shared/model/ui';
-import { Entity } from 'app/shared/model';
+import { Component, OnInit } from '@angular/core';
+import { InputFieldComponent } from '../input-field/input-field.component';
 
 @Component({
   selector: 'ofc-text-field',
   templateUrl: './text-field.component.html',
   styleUrls: ['./text-field.component.scss']
 })
-export class TextFieldComponent implements OnInit {
+export class TextFieldComponent extends InputFieldComponent {
 
-    @Input() fieldDefinition: FieldDefinition;
-    @Input() parentEntity: Entity;
-    
-    constructor() { }
-
+    constructor() {
+        super();
+    }
     
     ngOnInit() {
     }

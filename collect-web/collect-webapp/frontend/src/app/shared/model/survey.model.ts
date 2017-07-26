@@ -144,7 +144,7 @@ export class EntityDefinition extends NodeDefinition {
 
 export class AttributeDefinition extends NodeDefinition {
     key: boolean;
-    type: string;
+    attributeType: string;
     
     constructor(id: number, survey: Survey, parent: EntityDefinition) {
         super(id, survey, parent);

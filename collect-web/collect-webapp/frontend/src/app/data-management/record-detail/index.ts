@@ -1,3 +1,4 @@
+export * from './form-items/code-field/code-field.component';
 export * from './form-items/form-items.component';
 export * from './form-items/fieldset/fieldset.component';
 export * from './form-items/form-item/form-item.component';
