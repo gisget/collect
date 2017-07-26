@@ -1,3 +1,4 @@
+export * from './code-field-definition.model';
 export * from './field-definition.model';
 export * from './fieldset-definition.model';
 export * from './form-component-definition.model';

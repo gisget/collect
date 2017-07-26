@@ -8,9 +8,6 @@ import { TranslateModule }              from '@ngx-translate/core';
 import { DataManagementRoutingModule }  from './data-management-routing.module';
 import { DataManagementComponent }      from './data-management.component';
 import { RecordTableComponent }         from './record-table/record-table.component';
-import { RecordDetailComponent }         from './record-detail/record-detail.component';
-import { FieldsetComponent, FormItemComponent, FormItemsComponent, 
-    TabSetComponent, TabComponent, TextFieldComponent, CodeFieldComponent } from './record-detail';
 
 @NgModule({
     imports: [
@@ -21,10 +18,7 @@ import { FieldsetComponent, FormItemComponent, FormItemsComponent,
     ],
     declarations: [
         DataManagementComponent,
-        RecordTableComponent,
-        RecordDetailComponent,
-        CodeFieldComponent, FieldsetComponent, FormItemsComponent, FormItemComponent, TabSetComponent, TabComponent, 
-            TextFieldComponent
+        RecordTableComponent
     ]
 })
 export class DataManagementModule { }

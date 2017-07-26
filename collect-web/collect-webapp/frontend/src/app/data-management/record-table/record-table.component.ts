@@ -93,6 +93,6 @@ export class RecordTableComponent implements OnInit {
     }
     
     editRecord(record:Record) {
-        this.router.navigate([record.id], { relativeTo: this.route });
+        this.router.navigate(['records', record.id], { relativeTo: this.route });
     }
 }

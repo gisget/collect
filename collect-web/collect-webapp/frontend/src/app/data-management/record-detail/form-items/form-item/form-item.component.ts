@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Survey } from 'app/shared/model/survey.model';
+import { Attribute, Entity } from 'app/shared/model/record.model';
 import { FormComponentDefinition } from 'app/shared/model/ui/form-component-definition.model';
 import { FieldsetDefinition } from 'app/shared/model/ui/fieldset-definition.model';
 import { FieldDefinition } from 'app/shared/model/ui/field-definition.model';
@@ -13,7 +14,8 @@ import { AttributeDefinition } from 'app/shared/model/survey.model';
 export class FormItemComponent implements OnInit {
 
     @Input() itemDefinition: FormComponentDefinition;
-
+    @Input() parentEntity: Entity;
+    
     constructor() { }
     
     ngOnInit() {
@@ -30,5 +32,13 @@ export class FormItemComponent implements OnInit {
         } else {
             return null;
         } 
+    }
+    
+    get attribute(): Attribute {
+        if (this.itemDefinition instanceof FieldDefinition) {
+            
+        }  else {
+            return null;
+        }
     }
 }

@@ -1,4 +1,5 @@
 import { Injectable, Component, OnInit } from '@angular/core';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 
 import { RecordService, SurveyService, Record } from 'app/shared';
 
@@ -9,20 +10,21 @@ import { RecordService, SurveyService, Record } from 'app/shared';
 })
 export class DataManagementComponent implements OnInit {
 
-    surveyService: SurveyService;
-    
-    constructor(private _surveyService: SurveyService, private recordService: RecordService) {
-        this.surveyService = _surveyService;
+    constructor(private surveyService: SurveyService, private recordService: RecordService, 
+            private router: Router,  private route: ActivatedRoute) {
     }
     ngOnInit() {}
     
     onNewClick() {
+        let $this = this;
         let survey = this.surveyService.preferredSurvey;
         let surveyId = survey.id;
         let rootEntityId = survey.schema.defaultRootEntity.id;
         let versionId = null;
         let userId = 1;
         this.recordService.createNewRecord(surveyId, rootEntityId, versionId, userId)
-            .subscribe(record => console.log(record));
+            .subscribe(record => {
+                $this.router.navigate(['records', record.id], { relativeTo: $this.route });
+        });
     }
 }

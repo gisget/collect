@@ -9,12 +9,8 @@ const routes: Routes = [
         component: DataManagementComponent
     },
     { 
-        path: ':id', 
-        component: RecordDetailComponent,
-        data: {
-            breadcrumb: "Record Detail"
-        }
-//        loadChildren: '../data-management/record-detail/record-detail.module#RecordDetailModule'
+        path: 'records', 
+        loadChildren: './record-detail/record-detail.module#RecordDetailModule'
     }
 ];
 

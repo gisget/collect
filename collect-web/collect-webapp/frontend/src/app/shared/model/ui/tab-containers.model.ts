@@ -1,4 +1,5 @@
 import { Serializable } from '../serializable.model';
+import { CodeFieldDefinition } from './code-field-definition.model';
 import { FieldDefinition } from './field-definition.model';
 import { FieldsetDefinition } from './fieldset-definition.model';
 import { FormComponentDefinition } from './form-component-definition.model';
@@ -25,7 +26,11 @@ export class TabContainers {
             var item:Serializable;
             switch(itemJsonObj.type) {
             case 'FIELD':
-                item = new FieldDefinition(itemJsonObj.id, parentUIModelObject);
+                if (itemJsonObj.attributeType == 'CODE') {
+                    item = new CodeFieldDefinition(itemJsonObj.id, parentUIModelObject);
+                } else {
+                    item = new FieldDefinition(itemJsonObj.id, parentUIModelObject);
+                }
                 break;
             case 'FIELDSET':
                 item = new FieldsetDefinition(itemJsonObj.id, parentUIModelObject);

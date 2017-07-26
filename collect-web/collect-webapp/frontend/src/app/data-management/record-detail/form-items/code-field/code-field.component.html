@@ -1,3 +1,16 @@
-<p>
-  code-field works!
-</p>
+<span [ngSwitch]="fieldDefinition.layout">
+	<div *ngSwitchCase="'DROPDOWN'">
+		<p-dropdown [options]="options" [autoWidth]="false"></p-dropdown>
+	</div>
+	<div *ngSwitchCase="'RADIO'">
+		<div *ngFor="let option of options">
+			<p-radioButton value="{{option.value}}" label="{{option.label}}"></p-radioButton>
+		</div>
+	</div>
+	<div *ngSwitchCase="'TEXT'">
+		<input class="form-control" type="text" pInputText />
+	</div>
+	<div *ngSwitchDefault>
+		<div style="color: red;">{{field.layout}} NOT IMPLEMENTED!</div>
+	</div>
+</span>

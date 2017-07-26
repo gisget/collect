@@ -5,7 +5,7 @@ import { RecordDetailComponent } from './record-detail.component';
 
 const routes: Routes = [
     { 
-        path: '', 
+        path: ':id', 
         component: RecordDetailComponent,
         data: {
           breadcrumb: "Record Detail"

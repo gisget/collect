@@ -3,12 +3,20 @@
 <ng-template #fieldset>
 	<ofc-fieldset [fieldsetDefinition]="itemDefinition"></ofc-fieldset>
 </ng-template>
+
 <ng-template #inputField>
-	<span>{{itemDefinition.label}}</span>
-	<div [ngSwitch]="attributeType">
-		<ofc-code-field *ngSwitchCase="CODE" [fieldDefinition]="itemDefinition"></ofc-code-field>
-		<ofc-text-field *ngSwitchCase="TEXT" [fieldDefinition]="itemDefinition"></ofc-text-field>
-		<div *ngSwitchDefault>Type not supported</div>
+	<div class="form-group">
+		<label class="control-label col-sm-2">{{itemDefinition.label}}</label>
+		<div [ngSwitch]="attributeType" class="col-sm-10">
+			<ofc-boolean-field *ngSwitchCase="'BOOLEAN'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-boolean-field>
+			<ofc-code-field *ngSwitchCase="'CODE'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-code-field>
+			<ofc-date-field *ngSwitchCase="'DATE'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-date-field>
+			<ofc-text-field *ngSwitchCase="'TEXT'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-text-field>
+			<div *ngSwitchDefault>Type not supported</div>
+		</div>
 	</div>
 </ng-template>
-

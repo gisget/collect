@@ -68,6 +68,15 @@ export class Entity extends Node {
             
         }
     }
+    
+    getDescendants(ancestorDefIds: Array<number>): Array<Node> {
+        let currentEntity: Entity = this;
+        let descendants: Array<Node>;
+        for (var ancestorDefId in ancestorDefIds) {
+            descendants = currentEntity.childrenByDefinitionId[ancestorDefId];
+        }
+        return descendants;
+    } 
 }
 
 export class Attribute extends Node {
