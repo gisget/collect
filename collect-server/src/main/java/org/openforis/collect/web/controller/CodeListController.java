@@ -61,13 +61,13 @@ public class CodeListController {
 			@PathVariable int surveyId, 
 			@PathVariable int codeListId,
 			@RequestParam int recordId, 
-			@RequestParam int stepNumber, 
+			@RequestParam int recordStepNumber, 
 			@RequestParam int parentEntityId, 
-			@RequestParam int attrDefId) {
+			@RequestParam int codeAttributeDefinitionId) {
 		CollectSurvey survey = surveyManager.getOrLoadSurveyById(surveyId);
-		CollectRecord record = recordManager.load(survey, recordId, Step.valueOf(stepNumber), false);
+		CollectRecord record = recordManager.load(survey, recordId, Step.valueOf(recordStepNumber), false);
 		Entity parentEntity = (Entity) record.getNodeByInternalId(parentEntityId);
-		CodeAttributeDefinition attrDef = (CodeAttributeDefinition) survey.getSchema().getDefinitionById(attrDefId);
+		CodeAttributeDefinition attrDef = (CodeAttributeDefinition) survey.getSchema().getDefinitionById(codeAttributeDefinitionId);
 		List<CodeListItem> items = codeListManager.loadValidItems(parentEntity, attrDef);
 		return Views.fromObjects(items, CodeListItemView.class);
 	}
