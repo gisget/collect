@@ -1,8 +1,9 @@
 <p-tabView>
-	<ofc-form-items [itemDefinitions]="tab.items" [totalColumns]="tab.totalColumns" [totalRows]="tab.totalRows"></ofc-form-items>
+	<ofc-form-items [itemDefinitions]="tab.items" [parentEntity]="parentEntity" 
+		[totalColumns]="tab.totalColumns" [totalRows]="tab.totalRows"></ofc-form-items>
 	
 	<p-tabPanel *ngFor="let childTab of tab.tabs; let i = index; let first = first;" 
 			[selected]="first" header="{{childTab.label}}" lazy="true">
-        <ofc-tab [tab]="childTab"></ofc-tab>
+        <ofc-tab [tab]="childTab" [parentEntity]="parentEntity"></ofc-tab>
     </p-tabPanel>
 </p-tabView>

@@ -35,13 +35,13 @@ export class RecordDetailComponent implements OnInit {
         }
     }
     
-    get record(): Record {
-        return this._record;
-    }
-    
     @Input()
     set record(record: Record) {
         this._record = record;
     }
 
+    get record(): Record {
+        return this._record;
+    }
+    
 }

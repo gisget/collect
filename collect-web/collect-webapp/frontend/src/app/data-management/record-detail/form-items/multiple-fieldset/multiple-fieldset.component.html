@@ -1,0 +1,22 @@
+<div>
+	<div>
+		<div>
+			<label>Select a {{fieldsetDefinition.label}}:</label>
+			<p-dropdown [options]="entityOptions" [autoWidth]="false"
+				(onChange)="onEntityChange($event)"></p-dropdown>
+		</div>
+	</div>
+	
+	<div style="height: 600px;">
+		<div *ngIf="selectedEntity" style="height: 100%; overflow: auto;">
+			<ofc-form-items
+				[itemDefinitions]="fieldsetDefinition.items" 
+				[parentEntity]="selectedEntity"></ofc-form-items>
+				
+			<p-tabPanel *ngFor="let childTab of fieldsetDefinition.tabs let i = index; let first = first;" 
+					[selected]="first" header="{{childTab.label}}" lazy="true">
+		        <ofc-tab [tab]="childTab" [parentEntity]="selectedEntity"></ofc-tab>
+		    </p-tabPanel>
+		</div>
+	</div>
+</div>

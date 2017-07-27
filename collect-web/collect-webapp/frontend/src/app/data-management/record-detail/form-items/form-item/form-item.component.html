@@ -1,7 +1,15 @@
 <div *ngIf="isFieldset() then fieldset else inputField"></div>
 
 <ng-template #fieldset>
-	<ofc-fieldset [fieldsetDefinition]="itemDefinition"></ofc-fieldset>
+	<div *ngIf="isMultiple() then multipleFieldset else singleFieldset"></div>
+</ng-template>
+
+<ng-template #singleFieldset>
+	<ofc-fieldset [fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-fieldset>
+</ng-template>
+
+<ng-template #multipleFieldset>
+	<ofc-multiple-fieldset [fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-multiple-fieldset>
 </ng-template>
 
 <ng-template #inputField>
@@ -12,11 +20,20 @@
 				[attribute]="attribute"></ofc-boolean-field>
 			<ofc-code-field *ngSwitchCase="'CODE'" [fieldDefinition]="itemDefinition"
 				[attribute]="attribute"></ofc-code-field>
+			<ofc-coordinate-field *ngSwitchCase="'COORDINATE'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-coordinate-field>
 			<ofc-date-field *ngSwitchCase="'DATE'" [fieldDefinition]="itemDefinition"
 				[attribute]="attribute"></ofc-date-field>
+			<ofc-file-field *ngSwitchCase="'FILE'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-file-field>
+			<ofc-number-field *ngSwitchCase="'NUMBER'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-number-field>
 			<ofc-text-field *ngSwitchCase="'TEXT'" [fieldDefinition]="itemDefinition"
 				[attribute]="attribute"></ofc-text-field>
-			<div *ngSwitchDefault>Type not supported</div>
+			<ofc-time-field *ngSwitchCase="'TIME'" [fieldDefinition]="itemDefinition"
+				[attribute]="attribute"></ofc-time-field>
+			
+			<div *ngSwitchDefault>Type {{attributeType}} not supported</div>
 		</div>
 	</div>
 </ng-template>

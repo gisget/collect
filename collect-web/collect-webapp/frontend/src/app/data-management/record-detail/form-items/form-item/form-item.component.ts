@@ -1,11 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Survey } from 'app/shared/model/survey.model';
+import { Survey, AttributeDefinition } from 'app/shared/model/survey.model';
 import { Attribute, Entity } from 'app/shared/model/record.model';
-import { FormComponentDefinition } from 'app/shared/model/ui/form-component-definition.model';
-import { FieldsetDefinition } from 'app/shared/model/ui/fieldset-definition.model';
-import { FieldDefinition } from 'app/shared/model/ui/field-definition.model';
-import { AttributeDefinition } from 'app/shared/model/survey.model';
+import { FieldDefinition, FieldsetDefinition, FormComponentDefinition, MultipleFieldsetDefinition } from 'app/shared/model/ui';
 
 @Component({
     selector: 'ofc-form-item',
@@ -13,16 +10,35 @@ import { AttributeDefinition } from 'app/shared/model/survey.model';
 })
 export class FormItemComponent implements OnInit {
 
-    @Input() itemDefinition: FormComponentDefinition;
-    @Input() parentEntity: Entity;
+    _parentEntity: Entity;
+    _attribute: Attribute;
     
     constructor() { }
     
     ngOnInit() {
     }
     
+    @Input() itemDefinition: FormComponentDefinition;
+    @Input() 
+    set parentEntity(entity: Entity) {
+        this._parentEntity = entity;
+        this._attribute = this.determineAttribute();
+    }
+    
+    get parentEntity():Entity {
+        return this._parentEntity;
+    }
+    
+    get attribute(): Attribute {
+        return this._attribute;
+    }
+    
     isFieldset(): boolean {
         return this.itemDefinition instanceof FieldsetDefinition;
+    }
+    
+    isMultiple(): boolean {
+        return this.itemDefinition instanceof MultipleFieldsetDefinition;
     }
     
     get attributeType():string {
@@ -34,9 +50,10 @@ export class FormItemComponent implements OnInit {
         } 
     }
     
-    get attribute(): Attribute {
-        if (this.itemDefinition instanceof FieldDefinition) {
-            
+    determineAttribute(): Attribute {
+        if (this.parentEntity != null 
+                && this.itemDefinition instanceof FieldDefinition) {
+            return <Attribute>this.parentEntity.getSingleChild(this.itemDefinition.attributeDefinition.id);
         }  else {
             return null;
         }

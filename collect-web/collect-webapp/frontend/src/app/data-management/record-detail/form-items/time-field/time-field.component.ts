@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { InputFieldComponent } from '../input-field/input-field.component';
 
 @Component({
-  selector: 'app-time-field',
-  templateUrl: './time-field.component.html',
-  styleUrls: ['./time-field.component.scss']
+    selector: 'ofc-time-field',
+    templateUrl: './time-field.component.html',
+    styleUrls: ['./time-field.component.scss']
 })
-export class TimeFieldComponent implements OnInit {
+export class TimeFieldComponent extends InputFieldComponent {
 
-  constructor() { }
+    constructor() { 
+        super(); 
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

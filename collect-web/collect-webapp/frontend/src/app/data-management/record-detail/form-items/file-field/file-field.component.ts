@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { InputFieldComponent } from '../input-field/input-field.component';
 
 @Component({
-  selector: 'app-file-field',
-  templateUrl: './file-field.component.html',
-  styleUrls: ['./file-field.component.scss']
+    selector: 'ofc-file-field',
+    templateUrl: './file-field.component.html',
+    styleUrls: ['./file-field.component.scss']
 })
-export class FileFieldComponent implements OnInit {
+export class FileFieldComponent extends InputFieldComponent {
 
-  constructor() { }
+    constructor() {
+        super();
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
 }

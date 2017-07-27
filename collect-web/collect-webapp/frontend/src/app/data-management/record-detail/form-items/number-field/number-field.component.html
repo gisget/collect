@@ -1,0 +1,5 @@
+<div [ngSwitch]="numericType">
+	<p-spinner *ngSwitchCase="'INTEGER'"
+		[(ngModel)]="value"></p-spinner>
+	<input type="number" *ngSwitchCase="'REAL'" [(ngModel)]="value" />
+</div>

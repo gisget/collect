@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NumericFieldComponent } from './numeric-field.component';
+import { MultipleFieldsetComponent } from './multiple-fieldset.component';
 
-describe('NumericFieldComponent', () => {
-  let component: NumericFieldComponent;
-  let fixture: ComponentFixture<NumericFieldComponent>;
+describe('MultipleFieldsetComponent', () => {
+  let component: MultipleFieldsetComponent;
+  let fixture: ComponentFixture<MultipleFieldsetComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NumericFieldComponent ]
+      declarations: [ MultipleFieldsetComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NumericFieldComponent);
+    fixture = TestBed.createComponent(MultipleFieldsetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

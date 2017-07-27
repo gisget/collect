@@ -10,10 +10,14 @@ import { RecordService, SurveyService, Record } from 'app/shared';
 })
 export class DataManagementComponent implements OnInit {
 
-    constructor(private surveyService: SurveyService, private recordService: RecordService, 
+    constructor(private _surveyService: SurveyService, private recordService: RecordService, 
             private router: Router,  private route: ActivatedRoute) {
     }
     ngOnInit() {}
+
+    get surveyService():SurveyService {
+        return this._surveyService;
+    }
     
     onNewClick() {
         let $this = this;

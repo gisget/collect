@@ -10,17 +10,18 @@ import { Attribute, Entity } from 'app/shared/model';
 //abstract
 export class InputFieldComponent implements OnInit {
 
+    _fieldDefinition: FieldDefinition;
     _attribute: Attribute;
     
-    @Input() fieldDefinition: FieldDefinition;
+    @Input() 
+    set fieldDefinition(fieldDef: FieldDefinition) {
+        this._fieldDefinition = fieldDef;
+    }
+    
     @Input() 
     set attribute(attribute: Attribute) {
         this._attribute = attribute;
         this.updateSelectedValue();
-    }
-    
-    get attribute(): Attribute {
-        return this._attribute;
     }
     
     constructor() { }
@@ -31,4 +32,11 @@ export class InputFieldComponent implements OnInit {
     updateSelectedValue() {
     }
     
+    get fieldDefinition(): FieldDefinition {
+        return this._fieldDefinition;
+    }
+    
+    get attribute(): Attribute {
+        return this._attribute;
+    }
 }

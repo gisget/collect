@@ -16,10 +16,19 @@ export class Survey extends Serializable {
     name: string;
     uri: string;
     schema: Schema;
+    codeLists: Array<CodeList>;
     uiConfiguration: UIConfiguration;
     
     fillFromJSON(jsonObj) {
         super.fillFromJSON(jsonObj);
+        
+        this.codeLists = [];
+        for (var i = 0; i < jsonObj.codeLists.length; i++) {
+            var codeListJsonObj = jsonObj.codeLists[i];
+            var codeList = new CodeList(this);
+            codeList.fillFromJSON(codeListJsonObj);
+            this.codeLists.push(codeList);
+        }
         this.schema = new Schema(this);
         this.schema.fillFromJSON(jsonObj.schema);
         this.uiConfiguration = new UIConfiguration(this);
@@ -27,13 +36,51 @@ export class Survey extends Serializable {
     }
 }
 
-export class Schema extends Serializable {
+export class CodeList extends Serializable {
     survey: Survey;
-    rootEntities: Array<EntityDefinition>;
-    definitions: Array<NodeDefinition>;
+    id: number;
+    name: string;
+    items: Array<CodeListItem>;
+    hierarchycal: boolean;
     
     constructor(survey: Survey) {
         super();
+        this.survey = survey;
+    }
+    
+    fillFromJSON(jsonObj) {
+        super.fillFromJSON(jsonObj);
+        
+        this.items = [];
+        for (var i = 0; i < jsonObj.items.length; i++) {
+            let itemJsonObj = jsonObj.items[i];
+            let codeListItem: CodeListItem = new CodeListItem();
+            codeListItem.fillFromJSON(itemJsonObj);
+            this.items.push(codeListItem);
+        }
+    }
+}
+
+export class CodeListItem extends Serializable {
+    
+    code: string;
+    label: string;
+    color: string;
+    
+    constructor() {
+        super();
+    }
+    
+}
+
+export class Schema extends Serializable {
+    survey: Survey;
+    rootEntities: Array<EntityDefinition>;
+    definitions: Array<NodeDefinition>; //cache
+    
+    constructor(survey: Survey) {
+        super();
+        this.survey = survey;
         this.definitions = [];
     }
     
@@ -94,7 +141,16 @@ export class EntityDefinition extends NodeDefinition {
             if (nodeJsonObj.type == 'ENTITY') { 
                 nodeDef = new EntityDefinition(nodeJsonObj.id, this.survey, this);
             } else {
-                nodeDef = new AttributeDefinition(nodeJsonObj.id, this.survey, this);
+                switch (nodeJsonObj.attributeType) {
+                case 'CODE':
+                    nodeDef = new CodeAttributeDefinition(nodeJsonObj.id, this.survey, this);
+                    break;
+                case 'NUMERIC':
+                    nodeDef = new NumericAttributeDefinition(nodeJsonObj.id, this.survey, this);
+                    break;
+                default:
+                    nodeDef = new AttributeDefinition(nodeJsonObj.id, this.survey, this);
+                }
             }
             nodeDef.fillFromJSON(nodeJsonObj);
             this.children.push(nodeDef);
@@ -145,6 +201,25 @@ export class EntityDefinition extends NodeDefinition {
 export class AttributeDefinition extends NodeDefinition {
     key: boolean;
     attributeType: string;
+    
+    constructor(id: number, survey: Survey, parent: EntityDefinition) {
+        super(id, survey, parent);
+    }
+}
+
+export class CodeAttributeDefinition extends AttributeDefinition {
+    
+    codeListId: number;
+    parentCodeAttributeDefinitionId: number;
+    
+    constructor(id: number, survey: Survey, parent: EntityDefinition) {
+        super(id, survey, parent);
+    }
+}
+
+export class NumericAttributeDefinition extends AttributeDefinition {
+    
+    numericType: string;
     
     constructor(id: number, survey: Survey, parent: EntityDefinition) {
         super(id, survey, parent);

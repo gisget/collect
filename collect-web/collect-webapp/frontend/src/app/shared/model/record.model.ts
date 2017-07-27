@@ -4,6 +4,7 @@ import { Survey, NodeDefinition, EntityDefinition } from './survey.model';
 export class Record extends Serializable {
     id: number;
     survey: Survey;
+    stepNumber: number;
     rootEntity: Entity;
     rootEntityKeys: Array<string>;
     
@@ -15,7 +16,10 @@ export class Record extends Serializable {
     fillFromJSON(jsonObj) {
         super.fillFromJSON(jsonObj);
         
-        this.rootEntity = new Entity(this, null);
+        let defId: number = parseInt(jsonObj.definitionId);
+        let rootEntityDef: EntityDefinition = <EntityDefinition>this.survey.schema.getDefinitionById(defId);
+            
+        this.rootEntity = new Entity(this, rootEntityDef, null);
         this.rootEntity.fillFromJSON(jsonObj.rootEntity);
     }
 }
@@ -24,11 +28,13 @@ export class Node extends Serializable {
     
     record: Record;
     parent: Entity;
+    definition: NodeDefinition;
     id: number;
     
-    constructor(record: Record, parent: Entity) {
+    constructor(record: Record, definition: NodeDefinition, parent: Entity) {
         super();
         this.record = record;
+        this.definition = definition;
         this.parent = parent;
     }
     
@@ -41,8 +47,12 @@ export class Entity extends Node {
     
     childrenByDefinitionId: Object;
     
-    constructor(record: Record, parent: Entity) {
-        super(record, parent);
+    constructor(record: Record, definition: NodeDefinition, parent: Entity) {
+        super(record, definition, parent);
+    }
+    
+    get summaryLabel(): string {
+        return "Entity " + this.id;
     }
     
     fillFromJSON(jsonObj) {
@@ -54,18 +64,19 @@ export class Entity extends Node {
             let defId: number = parseInt(defIdStr);
             let def: NodeDefinition = this.record.survey.schema.getDefinitionById(defId);
             let childrenJsonObj = jsonObj.childrenByDefinitionId[defId];
+            let children: Array<Node> = [];
             for (var i = 0; i < childrenJsonObj.length; i++) {
                 let childJsonObj = childrenJsonObj[i];
                 let node: Node;
                 if (def instanceof EntityDefinition) {
-                    node = new Entity(this.record, this);
+                    node = new Entity(this.record, def, this);
                 } else {
-                    node = new Attribute(this.record, this);
+                    node = new Attribute(this.record, def, this);
                 }
                 node.fillFromJSON(childJsonObj);
-                $this.childrenByDefinitionId[defId] = node;
+                children.push(node);
             }
-            
+            $this.childrenByDefinitionId[defId] = children;
         }
     }
     
@@ -77,14 +88,19 @@ export class Entity extends Node {
         }
         return descendants;
     } 
+    
+    getSingleChild(defId: number): Node {
+        let children: Array<Node> = this.childrenByDefinitionId[defId];
+        return children == null || children.length == 0 ? null : children[0];
+    }
 }
 
 export class Attribute extends Node {
     
     fields: Array<Field>;
     
-    constructor(record: Record, parent: Entity) {
-        super(record, parent);
+    constructor(record: Record, definition: NodeDefinition, parent: Entity) {
+        super(record, definition, parent);
     }
     
     fillFromJSON(jsonObj) {

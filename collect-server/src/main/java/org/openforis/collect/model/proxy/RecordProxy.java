@@ -75,7 +75,12 @@ public class RecordProxy implements Proxy {
 	public Step getStep() {
 		return record.getStep();
 	}
-
+	
+	@ExternalizedProperty
+	public int getStepNumber() {
+		return record.getStep().getStepNumber();
+	}
+	
 	@ExternalizedProperty
 	public State getState() {
 		return record.getState();

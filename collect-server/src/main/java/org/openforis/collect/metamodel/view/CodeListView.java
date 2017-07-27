@@ -7,6 +7,7 @@ public class CodeListView extends SurveyObjectView {
 	
 	private String name;
 	List<CodeListItemView> items = new ArrayList<CodeListItemView>();
+	private boolean hierarchical;
 	
 	public List<CodeListItemView> getItems() {
 		return items;
@@ -22,5 +23,13 @@ public class CodeListView extends SurveyObjectView {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isHierarchical() {
+		return hierarchical;
+	}
+	
+	public void setHierarchical(boolean hierarchical) {
+		this.hierarchical = hierarchical;
 	}
 }

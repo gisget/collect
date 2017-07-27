@@ -17,6 +17,7 @@ import org.openforis.idm.metamodel.EntityDefinition;
 import org.openforis.idm.metamodel.NodeDefinition;
 import org.openforis.idm.metamodel.NodeDefinitionVisitor;
 import org.openforis.idm.metamodel.NodeLabel.Type;
+import org.openforis.idm.metamodel.NumericAttributeDefinition;
 
 /**
  * 
@@ -50,6 +51,7 @@ public class SurveyViewGenerator {
 				CodeListView codeListView = new CodeListView();
 				codeListView.setId(codeList.getId());
 				codeListView.setName(codeList.getName());
+				codeListView.setHierarchical(codeList.isHierarchical());
 				
 				CodeListService service = survey.getContext().getCodeListService();
 				List<CodeListItem> items = service.loadRootItems(codeList);
@@ -73,8 +75,14 @@ public class SurveyViewGenerator {
 				} else if (def instanceof CodeAttributeDefinition) {
 					CodeAttributeDefinition attrDef = (CodeAttributeDefinition) def;
 					int codeListId = attrDef.getList() == null ? -1: attrDef.getList().getId();
+					Integer parentCodeAttrId = attrDef.getParentCodeAttributeDefinition() == null ? null 
+							: attrDef.getParentCodeAttributeDefinition().getId();
 					view = new CodeAttributeDefView(id, name, label, AttributeType.valueOf(attrDef), attrDef.getFieldNames(), 
-							attrDef.isKey(), attrDef.isMultiple(), codeListId);
+							attrDef.isKey(), attrDef.isMultiple(), codeListId, parentCodeAttrId);
+				} else if (def instanceof NumericAttributeDefinition) {
+					NumericAttributeDefinition attrDef = (NumericAttributeDefinition) def;
+					view = new NumericAttributeDefView(id, name, label, AttributeType.valueOf(attrDef), attrDef.getFieldNames(), 
+							attrDef.isKey(), attrDef.isMultiple(), attrDef.getType());
 				} else {
 					AttributeDefinition attrDef = (AttributeDefinition) def;
 					view = new AttributeDefView(id, name, label, AttributeType.valueOf(attrDef), attrDef.getFieldNames(),

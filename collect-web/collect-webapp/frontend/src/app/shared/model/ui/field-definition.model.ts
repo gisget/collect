@@ -21,6 +21,4 @@ export class FieldDefinition extends UIModelObjectDefinition implements FormComp
         return survey.schema.getDefinitionById(this.attributeDefinitionId) as AttributeDefinition;
     }
  
-    
-    
 }    

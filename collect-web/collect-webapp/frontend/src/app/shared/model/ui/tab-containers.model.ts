@@ -3,6 +3,7 @@ import { CodeFieldDefinition } from './code-field-definition.model';
 import { FieldDefinition } from './field-definition.model';
 import { FieldsetDefinition } from './fieldset-definition.model';
 import { FormComponentDefinition } from './form-component-definition.model';
+import { MultipleFieldsetDefinition } from './multiple-fieldset-definition.model';
 import { TabDefinition } from './tab-definition.model';
 import { UIModelObjectDefinition } from './ui-model-object-definition.model';
 
@@ -34,6 +35,9 @@ export class TabContainers {
                 break;
             case 'FIELDSET':
                 item = new FieldsetDefinition(itemJsonObj.id, parentUIModelObject);
+                break;
+            case 'MULTIPLE_FIELDSET':
+                item = new MultipleFieldsetDefinition(itemJsonObj.id, parentUIModelObject);
                 break;
             default:
                 item = null;
