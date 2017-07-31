@@ -3,9 +3,9 @@ import { ActivatedRoute } from "@angular/router";
 
 import { TabViewModule } from 'primeng/primeng';
 
-import { RecordService, SurveyService } from 'app/shared/services';
+import { CommandService, RecordService, SurveyService } from 'app/shared/services';
 
-import { Record } from 'app/shared/model';
+import { Event, RecordEvent, Record } from 'app/shared/model';
 import { TabSetDefinition } from 'app/shared/model/ui/tabset-definition.model';
 
 import { TabSetComponent } from './tabset/tabset.component';
@@ -22,8 +22,10 @@ export class RecordDetailComponent implements OnInit {
     tabSet: TabSetDefinition = null;
     
     constructor(private recordService: RecordService, private surveyService: SurveyService, 
-        private route: ActivatedRoute) { }
-
+        private commandService: CommandService, private route: ActivatedRoute) {
+        commandService.eventReceived$.subscribe(event => this.onEventReceived(event));
+    }
+    
     ngOnInit() {
         const id = +this.route.snapshot.params["id"];
         let survey = this.surveyService.preferredSurvey;
@@ -32,6 +34,20 @@ export class RecordDetailComponent implements OnInit {
             this.tabSet = survey.uiConfiguration.mainTabSet;
             
             this.recordService.loadRecord(survey, id).subscribe(record => this.record = record);
+        }
+    }
+    
+    onEventReceived(event: Event) {
+        if (event instanceof RecordEvent) {
+            if (this.record.id == event.recordId && this.record.step == event.recordStep) {
+                console.log("event received");
+                switch (event.eventType) {
+                    case "CodeAttributeUpdatedEvent":
+                        break;
+                    case "DateAttributeUpdatedEvent":
+                        break;
+                }
+            }
         }
     }
     

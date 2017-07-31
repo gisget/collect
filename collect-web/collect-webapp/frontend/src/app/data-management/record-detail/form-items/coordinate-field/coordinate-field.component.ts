@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { InputFieldComponent } from '../input-field/input-field.component';
+import { CommandService } from 'app/shared/services';
 
 @Component({
     selector: 'ofc-coordinate-field',
@@ -8,8 +9,8 @@ import { InputFieldComponent } from '../input-field/input-field.component';
 })
 export class CoordinateFieldComponent extends InputFieldComponent {
 
-    constructor() {
-        super()
+    constructor(protected commandService: CommandService) {
+        super(commandService);
     }
 
     ngOnInit() {

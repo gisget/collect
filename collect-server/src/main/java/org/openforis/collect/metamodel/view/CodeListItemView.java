@@ -3,6 +3,8 @@ package org.openforis.collect.metamodel.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openforis.idm.metamodel.CodeListItem;
+
 public class CodeListItemView extends SurveyObjectView {
 	
 	String code;
@@ -11,6 +13,15 @@ public class CodeListItemView extends SurveyObjectView {
 	
 	List<CodeListItemView> items = new ArrayList<CodeListItemView>();
 
+	public CodeListItemView() {
+	}
+	
+	public CodeListItemView(CodeListItem item, String language) {
+		this.code = item.getCode();
+		this.label = item.getLabel(language);
+		this.color = item.getColor();
+	}
+	
 	public String getCode() {
 		return code;
 	}

@@ -4,13 +4,16 @@ import { Survey, NodeDefinition, EntityDefinition } from './survey.model';
 export class Record extends Serializable {
     id: number;
     survey: Survey;
+    step: string;
     stepNumber: number;
     rootEntity: Entity;
     rootEntityKeys: Array<string>;
+    nodeById: Array<Node>;
     
     constructor(survey: Survey) {
         super();
         this.survey = survey;
+        this.nodeById = [];
     }
     
     fillFromJSON(jsonObj) {
@@ -21,6 +24,10 @@ export class Record extends Serializable {
             
         this.rootEntity = new Entity(this, rootEntityDef, null);
         this.rootEntity.fillFromJSON(jsonObj.rootEntity);
+    }
+    
+    getNodeById(nodeId: number): Node {
+        return this.nodeById[nodeId];
     }
 }
 
@@ -75,6 +82,7 @@ export class Entity extends Node {
                 }
                 node.fillFromJSON(childJsonObj);
                 children.push(node);
+                $this.record.nodeById[node.id] = node;
             }
             $this.childrenByDefinitionId[defId] = children;
         }
@@ -114,6 +122,17 @@ export class Attribute extends Node {
             this.fields.push(field);
         }
     }
+    
+    get allFieldsFilled(): boolean {
+        for (var i = 0; i < this.fields.length; i++) {
+            let field: Field = this.fields[i];
+            if (field.value == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+       
 }
 
 export class Field extends Serializable {
@@ -123,5 +142,9 @@ export class Field extends Serializable {
     
     constructor() {
         super();
+    }
+    
+    get intValue(): number {
+        return this.value == null ? null : parseInt(this.value.toString());
     }
 }

@@ -17,13 +17,21 @@ import org.openforis.collect.command.CommandDispatcher;
 import org.openforis.collect.command.CreateRecordCommand;
 import org.openforis.collect.command.DeleteNodeCommand;
 import org.openforis.collect.command.DeleteRecordCommand;
-import org.openforis.collect.command.NodeCommand;
 import org.openforis.collect.command.UpdateAttributeCommand;
 import org.openforis.collect.command.UpdateBooleanAttributeCommand;
 import org.openforis.collect.command.UpdateCodeAttributeCommand;
 import org.openforis.collect.command.UpdateDateAttributeCommand;
+import org.openforis.collect.command.UpdateTextAttributeCommand;
+import org.openforis.collect.command.UpdateTimeAttributeCommand;
+import org.openforis.collect.command.value.BooleanValue;
+import org.openforis.collect.command.value.CodeValue;
+import org.openforis.collect.command.value.DateValue;
+import org.openforis.collect.command.value.TextValue;
+import org.openforis.collect.command.value.TimeValue;
+import org.openforis.collect.command.value.Value;
 import org.openforis.collect.designer.metamodel.AttributeType;
 import org.openforis.collect.event.RecordEvent;
+import org.openforis.collect.utils.Dates;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("command")
-public class CommandController {
+public class CommandController extends BasicController {
 
 	@Autowired
 	private CommandDispatcher commandDispatcher;
@@ -67,7 +75,7 @@ public class CommandController {
 	@RequestMapping(value="record/attribute", method=PATCH, consumes=APPLICATION_JSON_VALUE)
 	@Transactional
 	public @ResponseBody List<RecordEventView> updateAttribute(@RequestBody UpdateAttributeCommandWrapper commandWrapper) {
-		UpdateAttributeCommand command = commandWrapper.toCommand();
+		UpdateAttributeCommand<?> command = commandWrapper.toCommand();
 		List<RecordEvent> events = commandDispatcher.submit(command);
 		return toView(events);
 	}
@@ -113,43 +121,47 @@ public class CommandController {
 		
 	}
 	
-	static class UpdateAttributeCommandWrapper extends UpdateAttributeCommand {
+	static class UpdateAttributeCommandWrapper extends UpdateAttributeCommand<Value> {
 		
 		private static final long serialVersionUID = 1L;
 		
 		AttributeType attributeType;
-		Map<String, Object> value;
-
-		void setValueInCommand(NodeCommand c) {
+		Map<String, String> valueByField;
+		
+		private Value toCommandValue() {
 			switch(attributeType) {
 			case BOOLEAN:
-				((UpdateBooleanAttributeCommand) c).setValue((Boolean) value.get("value"));
-				break;
+				return new BooleanValue(Boolean.valueOf(valueByField.get("value")));
 			case CODE:
-				((UpdateCodeAttributeCommand) c).setCode((String) value.get("code"));
-				break;
+				return new CodeValue(valueByField.get("value"));
 			case DATE:
-				((UpdateDateAttributeCommand) c).setValue((Date) value.get("value"));
-				break;
+				String dateStr = valueByField.get("day") + "/" + valueByField.get("month") + "/" + valueByField.get("year");
+				Date date = Dates.parse(dateStr, "dd/mm/yyyy");
+				return new DateValue(date);
+			case TEXT:
+				return new TextValue(valueByField.get("value"));
+			case TIME:
+				return new TimeValue(Integer.parseInt(valueByField.get("hour")), 
+						Integer.parseInt(valueByField.get("minute")));
 			default:
-				throw new IllegalStateException("Unsupported command type: " + attributeType);
+				throw new IllegalStateException("Unsupported attribute type: " + attributeType);
 			}
 		}
 		
-		public UpdateAttributeCommand toCommand() {
-			UpdateAttributeCommand c;
-			Class<? extends UpdateAttributeCommand> commandType = toCommandType();
+		public UpdateAttributeCommand<?> toCommand() {
+			Class<? extends UpdateAttributeCommand<?>> commandType = toCommandType();
 			try {
-				c = commandType.getConstructor().newInstance();
+				@SuppressWarnings("unchecked")
+				UpdateAttributeCommand<Value> c = (UpdateAttributeCommand<Value>) commandType.getConstructor().newInstance();
 				BeanUtils.copyProperties(this, c, "attributeType", "value");
-				setValueInCommand(c);
+				c.setValue(toCommandValue());
 				return c;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
 
-		private Class<? extends UpdateAttributeCommand> toCommandType() {
+		private Class<? extends UpdateAttributeCommand<?>> toCommandType() {
 			switch(attributeType) {
 			case BOOLEAN:
 				return UpdateBooleanAttributeCommand.class;
@@ -157,6 +169,10 @@ public class CommandController {
 				return UpdateCodeAttributeCommand.class;
 			case DATE:
 				return UpdateDateAttributeCommand.class;
+			case TEXT:
+				return UpdateTextAttributeCommand.class;
+			case TIME:
+				return UpdateTimeAttributeCommand.class;
 			default:
 				throw new IllegalStateException("Unsupported command type: " + attributeType);
 			}
@@ -169,14 +185,15 @@ public class CommandController {
 		public void setAttributeType(AttributeType attributeType) {
 			this.attributeType = attributeType;
 		}
-
-		public Map<String, Object> getValue() {
-			return value;
+		
+		public Map<String, String> getValueByField() {
+			return valueByField;
+		}
+		
+		public void setValueByField(Map<String, String> valueByField) {
+			this.valueByField = valueByField;
 		}
 
-		public void setValue(Map<String, Object> value) {
-			this.value = value;
-		}
 	}
 	
 }

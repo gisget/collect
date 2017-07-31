@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { InputFieldComponent } from '../input-field/input-field.component';
 import { FieldDefinition, CodeFieldDefinition } from 'app/shared/model/ui';
 import { Attribute } from 'app/shared/model';
-import { CodeListService } from 'app/shared/services';
+import { CodeListService, CommandService } from 'app/shared/services';
 import { CodeAttributeDefinition } from 'app/shared/model';
 
 @Component({
@@ -16,12 +16,9 @@ export class CodeFieldComponent extends InputFieldComponent {
     codeValue: string;
     layout: string;
 
-    constructor(private codeListService: CodeListService) {
-        super();
-        this.options = [
-            { value: 1, label: "Option 1" },
-            { value: 2, label: "Option 2" },
-        ];
+    constructor(protected commandService: CommandService, private codeListService: CodeListService) {
+        super(commandService);
+        this.options = [];
     }
 
     ngOnInit() {
@@ -32,7 +29,12 @@ export class CodeFieldComponent extends InputFieldComponent {
         let codeFieldDef: CodeFieldDefinition = <CodeFieldDefinition>fieldDef;
         this.layout = codeFieldDef.layout;
     } 
-
+    
+    get fieldDefinition(): FieldDefinition {
+        return this._fieldDefinition;
+    }
+    
+    @Input()
     set attribute(attribute: Attribute) {
         this._attribute = attribute;
         this.options = [];
@@ -41,10 +43,23 @@ export class CodeFieldComponent extends InputFieldComponent {
             this.codeListService.loadAvailableItems(attrDef.survey.id, attrDef.codeListId, 
                 attribute.record.id, attribute.record.stepNumber, 
                 attribute.parent.id, attrDef.id)
-                .subscribe(items => this.options = items.map(item => {
-                    return {label: item.label, code: item.code};
-                }));
+                .subscribe(items => {
+                    let codeFieldDef: CodeFieldDefinition = <CodeFieldDefinition>this.fieldDefinition;
+                    this.options = items.map(item => {
+                        let label: string = '';
+                        if (codeFieldDef.showCode) {
+                            label += item.code + ' - ';
+                        }
+                        label += item.label == null ? '---' : item.label;
+                        return {label: label, code: item.code};
+                    });
+                });
         }
+        this.updateSelectedValue();
+    }
+    
+    get attribute(): Attribute {
+        return this._attribute;
     }
     
     updateSelectedValue() {
@@ -53,5 +68,9 @@ export class CodeFieldComponent extends InputFieldComponent {
         } else {
             this.codeValue = this.attribute.fields[0].value as string;
         }
+    }
+    
+    get updateCommandValue(): Object {
+        return this.codeValue == null ? null : {code: this.codeValue};
     }
 }

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { InputFieldComponent } from '../input-field/input-field.component';
 import { FieldDefinition } from 'app/shared/model/ui';
 import { NumericAttributeDefinition } from 'app/shared/model';
+import { CommandService } from 'app/shared/services';
 
 @Component({
     selector: 'ofc-number-field',
@@ -13,8 +14,8 @@ export class NumberFieldComponent extends InputFieldComponent {
 
     numericType: string;
 
-    constructor() {
-        super();
+    constructor(protected commandService: CommandService) {
+        super(commandService);
     }
 
     ngOnInit() {

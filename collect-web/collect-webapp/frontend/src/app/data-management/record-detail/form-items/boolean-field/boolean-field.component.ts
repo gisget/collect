@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InputFieldComponent } from '../input-field/input-field.component';
+import { CommandService } from 'app/shared/services';
 
 @Component({
     selector: 'ofc-boolean-field',
@@ -10,8 +11,8 @@ export class BooleanFieldComponent extends InputFieldComponent {
 
     value: boolean;
     
-    constructor() {
-        super();
+    constructor(protected commandService: CommandService) {
+        super(commandService);
     }
 
     ngOnInit() {

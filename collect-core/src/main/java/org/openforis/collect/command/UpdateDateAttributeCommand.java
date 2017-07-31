@@ -1,22 +1,9 @@
 package org.openforis.collect.command;
 
-import java.util.Date;
+import org.openforis.collect.command.value.DateValue;
 
-public class UpdateDateAttributeCommand extends UpdateAttributeCommand {
+public class UpdateDateAttributeCommand extends UpdateAttributeCommand<DateValue> {
 
 	private static final long serialVersionUID = 1L;
-	
-	private Date value;
-
-	public UpdateDateAttributeCommand() {
-	}
-	
-	public Date getValue() {
-		return value;
-	}
-	
-	public void setValue(Date value) {
-		this.value = value;
-	}
 	
 }

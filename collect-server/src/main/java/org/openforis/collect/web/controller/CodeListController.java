@@ -1,6 +1,7 @@
 package org.openforis.collect.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -10,16 +11,13 @@ import org.openforis.collect.manager.CodeListManager;
 import org.openforis.collect.manager.RecordManager;
 import org.openforis.collect.manager.SurveyManager;
 import org.openforis.collect.manager.dataexport.codelist.CodeListExportProcess;
-import org.openforis.collect.metamodel.uiconfiguration.view.Views;
 import org.openforis.collect.metamodel.view.CodeListItemView;
 import org.openforis.collect.model.CollectRecord;
 import org.openforis.collect.model.CollectRecord.Step;
 import org.openforis.collect.model.CollectSurvey;
-import org.openforis.collect.utils.Proxies;
 import org.openforis.idm.metamodel.CodeAttributeDefinition;
 import org.openforis.idm.metamodel.CodeList;
 import org.openforis.idm.metamodel.CodeListItem;
-import org.openforis.idm.metamodel.NodeDefinition;
 import org.openforis.idm.model.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class CodeListController {
+public class CodeListController extends BasicController {
 
 	private static final String CSV_CONTENT_TYPE = "text/csv";
 	private static final String CSV_EXTENSION = ".csv";
@@ -63,13 +61,22 @@ public class CodeListController {
 			@RequestParam int recordId, 
 			@RequestParam int recordStepNumber, 
 			@RequestParam int parentEntityId, 
-			@RequestParam int codeAttributeDefinitionId) {
+			@RequestParam int codeAttributeDefinitionId, 
+			@RequestParam(required=false) String labelLanguage) {
 		CollectSurvey survey = surveyManager.getOrLoadSurveyById(surveyId);
+		if (labelLanguage == null) {
+			labelLanguage = survey.getDefaultLanguage();
+		}
 		CollectRecord record = recordManager.load(survey, recordId, Step.valueOf(recordStepNumber), false);
 		Entity parentEntity = (Entity) record.getNodeByInternalId(parentEntityId);
 		CodeAttributeDefinition attrDef = (CodeAttributeDefinition) survey.getSchema().getDefinitionById(codeAttributeDefinitionId);
 		List<CodeListItem> items = codeListManager.loadValidItems(parentEntity, attrDef);
-		return Views.fromObjects(items, CodeListItemView.class);
+		List<CodeListItemView> views = new ArrayList<CodeListItemView>(items.size());
+		for (CodeListItem item : items) {
+			CodeListItemView view = new CodeListItemView(item, labelLanguage);
+			views.add(view);
+		}
+		return views;
 	}
 	
 	protected String exportCodeList(HttpServletResponse response,

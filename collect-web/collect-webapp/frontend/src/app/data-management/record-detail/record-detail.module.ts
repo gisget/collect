@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
-import { ButtonModule, CheckboxModule, DataTableModule, DropdownModule, FieldsetModule, InputTextModule, 
+import { ButtonModule, CalendarModule, CheckboxModule, DataTableModule, DropdownModule, FieldsetModule, InputTextModule, 
     MenubarModule, RadioButtonModule, SpinnerModule, TabViewModule } from 'primeng/primeng';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -19,7 +19,7 @@ import { BooleanFieldComponent, CodeFieldComponent, CoordinateFieldComponent, Da
     imports: [
         CommonModule, FormsModule,
         RecordDetailRoutingModule,
-        ButtonModule, CheckboxModule, DataTableModule, DropdownModule, FieldsetModule, InputTextModule, 
+        ButtonModule, CalendarModule, CheckboxModule, DataTableModule, DropdownModule, FieldsetModule, InputTextModule, 
         MenubarModule, RadioButtonModule, SpinnerModule, TabViewModule,
         TranslateModule
     ],

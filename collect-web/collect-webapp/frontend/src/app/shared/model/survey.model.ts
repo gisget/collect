@@ -70,7 +70,6 @@ export class CodeListItem extends Serializable {
     constructor() {
         super();
     }
-    
 }
 
 export class Schema extends Serializable {

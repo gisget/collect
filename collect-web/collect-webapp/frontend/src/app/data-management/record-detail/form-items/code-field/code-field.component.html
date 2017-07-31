@@ -1,16 +1,19 @@
-<span [ngSwitch]="layout">
-	<div *ngSwitchCase="'DROPDOWN'">
-		<p-dropdown [options]="options" [autoWidth]="false"></p-dropdown>
-	</div>
-	<div *ngSwitchCase="'RADIO'">
-		<div *ngFor="let option of options">
-			<p-radioButton value="{{option.value}}" label="{{option.label}}"></p-radioButton>
+<div *ngIf="attribute">
+	<span [ngSwitch]="layout">
+		<div *ngSwitchCase="'DROPDOWN'">
+			<p-dropdown [options]="options" [autoWidth]="false" [(ngModel)]="codeValue"></p-dropdown>
 		</div>
-	</div>
-	<div *ngSwitchCase="'TEXT'">
-		<input class="form-control" type="text" pInputText [(ngModel)]="codeValue"/>
-	</div>
-	<div *ngSwitchDefault>
-		<div style="color: red;">{{field.layout}} NOT IMPLEMENTED!</div>
-	</div>
-</span>
+		<div *ngSwitchCase="'RADIO'">
+			<div *ngFor="let option of options">
+				<p-radioButton value="{{option.value}}" label="{{option.label}}" 
+					name="{{attribute.id}}-options" [(ngModel)]="codeValue"></p-radioButton>
+			</div>
+		</div>
+		<div *ngSwitchCase="'TEXT'">
+			<input class="form-control" type="text" pInputText [(ngModel)]="codeValue"/>
+		</div>
+		<div *ngSwitchDefault>
+			<div style="color: red;">{{field.layout}} NOT IMPLEMENTED!</div>
+		</div>
+	</span>
+</div>

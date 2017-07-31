@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { CodeListService, RecordService, SurveyService } from './shared';
+import { CodeListService, CommandService, RecordService, SurveyService } from './shared/services';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    providers: [CodeListService, RecordService, SurveyService]
+    providers: [CodeListService, CommandService, RecordService, SurveyService]
 })
 export class AppComponent {
 
