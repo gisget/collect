@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import {SelectItem} from 'primeng/primeng'
+
 import { InputFieldComponent } from '../input-field/input-field.component';
 import { FieldDefinition, CodeFieldDefinition } from 'app/shared/model/ui';
 import { Attribute } from 'app/shared/model';
@@ -12,7 +14,7 @@ import { CodeAttributeDefinition } from 'app/shared/model';
 })
 export class CodeFieldComponent extends InputFieldComponent {
 
-    options: Array<Object>;
+    options: SelectItem[];
     _codeValue: string;
     layout: string;
 
@@ -51,7 +53,7 @@ export class CodeFieldComponent extends InputFieldComponent {
                             label += item.code + ' - ';
                         }
                         label += item.label == null ? '---' : item.label;
-                        return {label: label, code: item.code};
+                        return {label: label, value: item.code};
                     });
                 });
         }

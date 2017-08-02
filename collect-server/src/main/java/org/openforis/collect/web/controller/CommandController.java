@@ -133,7 +133,7 @@ public class CommandController extends BasicController {
 			case BOOLEAN:
 				return new BooleanValue(Boolean.valueOf(valueByField.get("value")));
 			case CODE:
-				return new CodeValue(valueByField.get("value"));
+				return new CodeValue(valueByField.get("code"), valueByField.get("qualifier"));
 			case DATE:
 				String dateStr = valueByField.get("day") + "/" + valueByField.get("month") + "/" + valueByField.get("year");
 				Date date = Dates.parse(dateStr, "dd/mm/yyyy");
