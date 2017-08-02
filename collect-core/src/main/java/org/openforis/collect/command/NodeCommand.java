@@ -13,7 +13,7 @@ public abstract class NodeCommand implements Command<List<RecordEvent>> {
 	private int recordId;
 	private int parentEntityId;
 	private int nodeDefId;
-	private int nodeId;
+	private Integer nodeId;
 
 	public String getUsername() {
 		return username;
@@ -55,11 +55,11 @@ public abstract class NodeCommand implements Command<List<RecordEvent>> {
 		this.nodeDefId = nodeDefId;
 	}
 
-	public int getNodeId() {
+	public Integer getNodeId() {
 		return nodeId;
 	}
 
-	public void setNodeId(int nodeId) {
+	public void setNodeId(Integer nodeId) {
 		this.nodeId = nodeId;
 	}
 

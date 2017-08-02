@@ -9,11 +9,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.openforis.collect.model.AttributeAddChange;
 import org.openforis.collect.model.AttributeChange;
 import org.openforis.collect.model.CollectRecord;
 import org.openforis.collect.model.EntityAddChange;
+import org.openforis.collect.model.EntityChange;
 import org.openforis.collect.model.NodeChange;
 import org.openforis.collect.model.NodeChangeSet;
 import org.openforis.collect.model.NodeDeleteChange;
@@ -96,8 +99,21 @@ public class EventProducer {
 
 		EventFactory factory = new EventFactory(recordId, recordStep, ancestorIds, node, userName);
 
-		if (change instanceof EntityAddChange) {
-			return factory.entityCreated();
+		if (change instanceof EntityChange) {
+			if (change instanceof EntityAddChange) {
+				return factory.entityCreated();
+			} else {
+				List<RecordEvent> events = new ArrayList<RecordEvent>();
+				EntityChange entityChange = (EntityChange) change;
+				EntityDefinition entityDef = entityChange.getNode().getDefinition();
+				Map<String, Boolean> childrenRelevance = entityChange.getChildrenRelevance();
+				for (Entry<String, Boolean> entry : childrenRelevance.entrySet()) {
+					String childName = entry.getKey();
+					boolean relevant = entry.getValue();
+					NodeDefinition childDef = entityDef.getChildDefinition(childName);
+					events.add(factory.relevanceChanged(childDef.getId(), relevant));
+				}
+			}
 		} else if (change instanceof AttributeChange) {
 			if (change instanceof AttributeAddChange) {
 				return factory.attributeCreated();
@@ -200,6 +216,11 @@ public class EventProducer {
 				}
 			}
 			return events;
+		}
+		
+		RelevanceChangedEvent relevanceChanged(int childDefinitionId, boolean relevant) {
+			return new RelevanceChangedEvent(surveyName, recordId, recordStep, String.valueOf(definitionId), 
+					ancestorIds, String.valueOf(nodeId), String.valueOf(childDefinitionId), relevant, timestamp, userName);
 		}
 		
 		List<? extends RecordEvent> attributeCreated() {

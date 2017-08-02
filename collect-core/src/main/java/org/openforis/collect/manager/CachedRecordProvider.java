@@ -23,6 +23,7 @@ public class CachedRecordProvider implements RecordProvider {
 		RecordCache recordCache = recordsBySurvey.get(survey);
 		if (recordCache == null) {
 			recordCache = new RecordCache();
+			recordsBySurvey.put(survey, recordCache);
 		}
 		CollectRecord record = recordCache.get(recordId);
 		if (record == null) {

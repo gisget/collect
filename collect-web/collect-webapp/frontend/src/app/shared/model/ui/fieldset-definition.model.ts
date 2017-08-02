@@ -9,7 +9,6 @@ export class FieldsetDefinition extends UIModelObjectDefinition implements FormC
     items: Array<FormComponentDefinition>;
     tabs: TabDefinition[];
     entityDefinitionId: number;
-    entityDefinition: EntityDefinition;
     label: string;
     column: number;
     columnSpan: number;
@@ -27,5 +26,9 @@ export class FieldsetDefinition extends UIModelObjectDefinition implements FormC
         super.fillFromJSON(jsonObj);
         this.tabs = TabContainers.createTabsFromJSON(jsonObj.tabs, this);
         this.items = TabContainers.createItemsFromJSON(jsonObj.children, this);
+    }
+    
+    get entityDefinition(): EntityDefinition {
+        return <EntityDefinition>this.parent.survey.schema.getDefinitionById(this.entityDefinitionId);
     }
 }

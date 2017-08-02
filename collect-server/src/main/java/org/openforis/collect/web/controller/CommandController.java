@@ -87,7 +87,7 @@ public class CommandController extends BasicController {
 		return toView(events);
 	}
 	
-	@RequestMapping(value="record/node", method=DELETE, consumes=APPLICATION_JSON_VALUE)
+	@RequestMapping(value="record/delete_node", method=DELETE, consumes=APPLICATION_JSON_VALUE)
 	@Transactional
 	public @ResponseBody List<RecordEventView> deleteNode(@RequestBody DeleteNodeCommand command) {
 		List<RecordEvent> events = commandDispatcher.submit(command);

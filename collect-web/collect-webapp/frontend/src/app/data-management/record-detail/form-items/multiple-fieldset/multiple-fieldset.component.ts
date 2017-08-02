@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 
 import { MultipleFieldsetDefinition } from 'app/shared/model/ui';
-import { Entity } from 'app/shared/model';
+import { Entity, EntityDefinition, Record } from 'app/shared/model';
+import { CommandService } from 'app/shared/services';
 
 @Component({
     selector: 'ofc-multiple-fieldset',
@@ -31,7 +32,7 @@ export class MultipleFieldsetComponent implements OnInit {
         }
     }
     
-    constructor() { }
+    constructor(private commandService: CommandService) { }
 
     ngOnInit() {
     }
@@ -48,5 +49,18 @@ export class MultipleFieldsetComponent implements OnInit {
             this.selectedEntity = this.entities.find(entity => entity.id == entityId);
         }
     }
-
+    
+    onNewClick() {
+        let record: Record = this.parentEntity.record;
+        let parentEntityId: number = this.parentEntity.id;
+        let entityDef: EntityDefinition = this.fieldsetDefinition.entityDefinition;
+        this.commandService.addEntity(record, parentEntityId, entityDef);
+    }
+    
+    onDeleteClick() {
+        let record: Record = this.parentEntity.record;
+        let parentEntityId: number = this.parentEntity.id;
+        let entityDef: EntityDefinition = this.fieldsetDefinition.entityDefinition;
+        this.commandService.deleteNode(this.selectedEntity);
+    }
 }

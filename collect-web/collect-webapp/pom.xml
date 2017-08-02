@@ -12,7 +12,7 @@
 	<packaging>war</packaging>
 	
 	<properties>
-		<node.version>v8.0.0</node.version>
+		<node.version>v8.2.1</node.version>
 		<npm.version>5.3.0</npm.version>
 		<angular-cli.version>1.2.1</angular-cli.version>
 	</properties>

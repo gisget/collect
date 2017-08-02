@@ -54,7 +54,7 @@ export class Entity extends Node {
     
     childrenByDefinitionId: Object;
     
-    constructor(record: Record, definition: NodeDefinition, parent: Entity) {
+    constructor(record: Record, definition: EntityDefinition, parent: Entity) {
         super(record, definition, parent);
     }
     
@@ -101,6 +101,15 @@ export class Entity extends Node {
         let children: Array<Node> = this.childrenByDefinitionId[defId];
         return children == null || children.length == 0 ? null : children[0];
     }
+    
+    addChild(child: Node) {
+        let children: Array<Node> = this.childrenByDefinitionId[child.definition.id];
+        if (children == null) {
+            children = [];
+            this.childrenByDefinitionId[child.definition.id] = children;
+        }
+        children.push(child);
+    }
 }
 
 export class Attribute extends Node {
@@ -132,7 +141,16 @@ export class Attribute extends Node {
         }
         return true;
     }
-       
+    
+    setFieldValue(fieldIdx: number, value: any) {
+        if (this.fields == null) {
+            this.fields = [];
+        }
+        while (this.fields.length <= fieldIdx) {
+            this.fields.push(new Field());
+        }
+        this.fields[fieldIdx].value = value;
+    }
 }
 
 export class Field extends Serializable {

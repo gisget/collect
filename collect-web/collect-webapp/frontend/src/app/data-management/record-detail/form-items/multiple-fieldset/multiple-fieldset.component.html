@@ -4,6 +4,8 @@
 			<label>Select a {{fieldsetDefinition.label}}:</label>
 			<p-dropdown [options]="entityOptions" [autoWidth]="false"
 				(onChange)="onEntityChange($event)"></p-dropdown>
+			<button pButton label="New" icon="fa-plus-square" (click)="onNewClick()"></button>
+			<button *ngIf="selectedEntity" pButton label="Delete" icon="fa-trash" (click)="onDeleteClick()"></button>
 		</div>
 	</div>
 	

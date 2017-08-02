@@ -13,7 +13,7 @@ import { CodeAttributeDefinition } from 'app/shared/model';
 export class CodeFieldComponent extends InputFieldComponent {
 
     options: Array<Object>;
-    codeValue: string;
+    _codeValue: string;
     layout: string;
 
     constructor(protected commandService: CommandService, private codeListService: CodeListService) {
@@ -64,13 +64,23 @@ export class CodeFieldComponent extends InputFieldComponent {
     
     updateSelectedValue() {
         if (this.attribute == null) {
-            this.codeValue = null;
+            this._codeValue = null;
         } else {
-            this.codeValue = this.attribute.fields[0].value as string;
+            this._codeValue = this.attribute.fields[0].value as string;
         }
     }
     
     get updateCommandValue(): Object {
-        return this.codeValue == null ? null : {code: this.codeValue};
+        return this._codeValue == null ? null : {code: this._codeValue};
     }
+    
+    get codeValue(): string {
+        return this._codeValue;
+    }
+    
+    set codeValue(value: string) {
+        this._codeValue = value;
+        this.sendUpdateAttributeCommand();
+    }
+    
 }

@@ -39,8 +39,7 @@ export class InputFieldComponent implements OnInit {
     }
     
     sendUpdateAttributeCommand() {
-        this.commandService.sendUpdateAttributeCommand("admin", 
-            this.attribute, this.fieldDefinition.attributeType, this.updateCommandValue)
+        this.commandService.updateAttribute(this.attribute, this.fieldDefinition.attributeType, this.updateCommandValue)
             .subscribe(events => console.log(events));
     }
     
