@@ -15,6 +15,7 @@ export class InputFieldComponent implements OnInit {
     _attribute: Attribute;
     
     constructor(protected commandService: CommandService) {
+         commandService.eventReceived$.subscribe(event => this.onEventReceived(event));
     }
     
     @Input() 
@@ -40,16 +41,17 @@ export class InputFieldComponent implements OnInit {
     
     sendUpdateAttributeCommand() {
         this.commandService.updateAttribute(this.attribute, this.fieldDefinition.attributeType, this.updateCommandValue)
-            .subscribe(events => console.log(events));
+            .subscribe(events => {});
     }
     
     onEventReceived(event: Event) {
         if (event instanceof RecordEvent) {
             let recordEvent: RecordEvent = <RecordEvent>event;
-            if (this.attribute != null && this.attribute.record.id == recordEvent.recordId 
+            if (this.attribute != null 
+                    && this.attribute.record.id == recordEvent.recordId 
                     && this.attribute.record.step == recordEvent.recordStep 
                     && this.attribute.id == parseInt(recordEvent.nodeId)) {
-                console.log("attribute updated");
+                console.log("attribute " + this.attribute.id + " updated");
                 this.updateSelectedValue();
             }
         }

@@ -22,7 +22,7 @@ export class FormItemComponent implements OnInit {
     @Input() 
     set parentEntity(entity: Entity) {
         this._parentEntity = entity;
-        this._attribute = this.determineAttribute();
+        this.attribute = this.determineAttribute();
     }
     
     get parentEntity():Entity {
@@ -31,6 +31,10 @@ export class FormItemComponent implements OnInit {
     
     get attribute(): Attribute {
         return this._attribute;
+    }
+
+    set attribute(attribute: Attribute) {
+        this._attribute = attribute;
     }
     
     isFieldset(): boolean {
