@@ -130,7 +130,7 @@ public class UITable extends UIModelObject implements NodeDefinitionUIComponent,
 		return getHeadingRows().size();
 	}
 	
-	public List<List<UITableHeadingComponent>> getHeadingRows() {
+	public List<List<UIColumn>> getHeadingRows() {
 		if (headingComponents.isEmpty()) {
 			return Collections.emptyList();
 		}

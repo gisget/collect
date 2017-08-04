@@ -9,5 +9,6 @@ export * from './form-item/form-item.component';
 export * from './input-field/input-field.component';
 export * from './multiple-fieldset/multiple-fieldset.component';
 export * from './number-field/number-field.component';
+export * from './table-form-item/table-form-item.component';
 export * from './text-field/text-field.component';
 export * from './time-field/time-field.component';

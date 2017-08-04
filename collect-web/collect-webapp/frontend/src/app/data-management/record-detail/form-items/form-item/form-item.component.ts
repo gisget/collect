@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { Survey, AttributeDefinition } from 'app/shared/model/survey.model';
 import { Attribute, Entity } from 'app/shared/model/record.model';
-import { FieldDefinition, FieldsetDefinition, FormComponentDefinition, MultipleFieldsetDefinition } from 'app/shared/model/ui';
+import { FieldDefinition, FieldsetDefinition, FormComponentDefinition, MultipleFieldsetDefinition,
+        TableDefinition } from 'app/shared/model/ui';
 
 @Component({
     selector: 'ofc-form-item',
@@ -37,12 +38,20 @@ export class FormItemComponent implements OnInit {
         this._attribute = attribute;
     }
     
-    isFieldset(): boolean {
-        return this.itemDefinition instanceof FieldsetDefinition;
-    }
-    
-    isMultiple(): boolean {
-        return this.itemDefinition instanceof MultipleFieldsetDefinition;
+    get mainType(): string {
+        if (this.itemDefinition instanceof FieldDefinition) {
+            return "SINGLE_FIELD";
+        } else if (this.itemDefinition instanceof FieldsetDefinition) {
+            if (this.itemDefinition instanceof MultipleFieldsetDefinition) {
+                return "MULTIPLE_FIELDSET";
+            } else {
+                return "SINGLE_FIELDSET";
+            }
+        } else if (this.itemDefinition instanceof TableDefinition) {
+            return "TABLE";
+        } else {
+            return null;
+        }
     }
     
     get attributeType():string {

@@ -1,0 +1,11 @@
+<p-dataTable [value]="entities">
+    <p-headerColumnGroup>
+    	<p-row *ngFor="let headingRow of tableDefinition.headingRows let i = index; let firstRow = first;">
+    		<p-column *ngFor="let headingColumn of headingRow let j = index; let firstCol = first;"
+    			header="{{headingColumn.label}}"></p-column>
+    	</p-row> 
+    </p-headerColumnGroup>
+    
+   	<p-column *ngFor="let headingColumn of headingColumns let i = index; let firstCol = first;"
+   		field="{{attributeDefinitionId}}"></p-column>
+</p-dataTable>

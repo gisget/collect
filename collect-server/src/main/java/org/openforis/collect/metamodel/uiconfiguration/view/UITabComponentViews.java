@@ -18,7 +18,7 @@ public abstract class UITabComponentViews {
 				if (c instanceof UICodeField) {
 					views.add(new UICodeFieldView((UICodeField) c));
 				} else {
-					views.add(new UIFieldView((UIField) c));
+					views.add(new UIFieldView<UIField>((UIField) c));
 				}
 			} else if (c instanceof UIFormSection) {
 				views.add(new UIFieldSetView((UIFormSection) c));

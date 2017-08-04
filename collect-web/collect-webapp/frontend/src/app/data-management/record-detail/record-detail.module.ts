@@ -13,7 +13,7 @@ import { TabSetComponent } from './tabset/tabset.component';
 import { BooleanFieldComponent, CodeFieldComponent, CoordinateFieldComponent, DateFieldComponent, 
     FieldsetComponent, FileFieldComponent, FormItemComponent, FormItemsComponent,
     InputFieldComponent, MultipleFieldsetComponent, NumberFieldComponent, 
-    TextFieldComponent, TimeFieldComponent } from './form-items';
+    TableFormItemComponent, TextFieldComponent, TimeFieldComponent } from './form-items';
 
 @NgModule({
     imports: [
@@ -29,7 +29,7 @@ import { BooleanFieldComponent, CodeFieldComponent, CoordinateFieldComponent, Da
         FieldsetComponent, FileFieldComponent, FormItemComponent, FormItemsComponent,
         InputFieldComponent, NumberFieldComponent,
         TextFieldComponent, TimeFieldComponent,
-        TabComponent, TabSetComponent, MultipleFieldsetComponent
+        TabComponent, TabSetComponent, MultipleFieldsetComponent, TableFormItemComponent
     ]
 })
 export class RecordDetailModule { }

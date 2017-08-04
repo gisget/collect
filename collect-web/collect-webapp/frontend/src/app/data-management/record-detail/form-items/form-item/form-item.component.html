@@ -1,20 +1,16 @@
-<div *ngIf="isFieldset() then fieldset else inputField"></div>
-
-<ng-template #fieldset>
-	<div *ngIf="isMultiple() then multipleFieldset else singleFieldset"></div>
-</ng-template>
-
-<ng-template #singleFieldset>
-	<ofc-fieldset [fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-fieldset>
-</ng-template>
-
-<ng-template #multipleFieldset>
-	<ofc-multiple-fieldset [fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-multiple-fieldset>
-</ng-template>
-
-<ng-template #inputField>
-	<div class="form-group">
+<div [ngSwitch]="mainType">
+	<ofc-fieldset *ngSwitchCase="'SINGLE_FIELDSET'" 
+		[fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-fieldset>
+	
+	<ofc-multiple-fieldset *ngSwitchCase="'MULTIPLE_FIELDSET'" 
+		[fieldsetDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-multiple-fieldset>
+	
+	<ofc-table-form-item *ngSwitchCase="'TABLE'" 
+		[tableDefinition]="itemDefinition" [parentEntity]="parentEntity"></ofc-table-form-item>
+	
+	<div *ngSwitchCase="'SINGLE_FIELD'"  class="form-group">
 		<label class="control-label col-sm-2">{{itemDefinition.label}}</label>
+		
 		<div [ngSwitch]="attributeType" class="col-sm-10">
 			<ofc-boolean-field *ngSwitchCase="'BOOLEAN'" [fieldDefinition]="itemDefinition"
 				[attribute]="attribute"></ofc-boolean-field>
@@ -36,4 +32,4 @@
 			<div *ngSwitchDefault>Type {{attributeType}} not supported</div>
 		</div>
 	</div>
-</ng-template>
+</div>

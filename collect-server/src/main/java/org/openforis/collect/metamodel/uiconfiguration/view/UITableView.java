@@ -3,9 +3,9 @@ package org.openforis.collect.metamodel.uiconfiguration.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openforis.collect.metamodel.ui.UIColumn;
 import org.openforis.collect.metamodel.ui.UITable;
 import org.openforis.collect.metamodel.ui.UITable.Direction;
-import org.openforis.collect.metamodel.ui.UITableHeadingComponent;
 
 public class UITableView extends UIModelObjectView<UITable> implements UITabComponentView<UITable> {
 
@@ -26,11 +26,11 @@ public class UITableView extends UIModelObjectView<UITable> implements UITabComp
 		return UITableHeadingComponentView.fromObjects(uiObject.getHeadingComponents());
 	}
 	
-	public List<List<UITableHeadingComponentView<?>>> getHeadingRows() {
-		List<List<UITableHeadingComponentView<?>>> rowViews = new ArrayList<List<UITableHeadingComponentView<?>>>();
-		List<List<UITableHeadingComponent>> rows = uiObject.getHeadingRows();
-		for (List<UITableHeadingComponent> row : rows) {
-			List<UITableHeadingComponentView<?>> rowView = UITableHeadingComponentView.fromObjects(row);
+	public List<List<UIColumnView>> getHeadingRows() {
+		List<List<UIColumnView>> rowViews = new ArrayList<List<UIColumnView>>();
+		List<List<UIColumn>> rows = uiObject.getHeadingRows();
+		for (List<UIColumn> row : rows) {
+			List<UIColumnView> rowView = UIColumnView.fromObjects(row);
 			rowViews.add(rowView);
 		}
 		return rowViews;
