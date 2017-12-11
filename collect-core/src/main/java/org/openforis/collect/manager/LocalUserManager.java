@@ -88,19 +88,25 @@ public class LocalUserManager extends AbstractPersistedObjectManager<User, Integ
 		if (availableTo.getRoles().contains(UserRole.ADMIN)) {
 			return loadAll();
 		} else {
-			Set<User> users = new TreeSet<User>();
 			List<UserGroup> userGroups = groupManager.findByUser(availableTo);
+			Set<User> users = new TreeSet<User>();
 			for (UserGroup userGroup : userGroups) {
-				List<UserInGroup> groupUsers = groupManager.findUsersInGroup(userGroup);
-				for (UserInGroup userInGroup : groupUsers) {
-					Integer userId = userInGroup.getUserId();
-					User user = loadById(userId);
-					users.add(user);
-				}
+				users.addAll(loadByGroup(userGroup));
 			}
 			//sorted by username by default (see User.compareTo)
 			return new ArrayList<User>(users);
 		}
+	}
+
+	private Set<User> loadByGroup(UserGroup userGroup) {
+		Set<User> users = new TreeSet<User>();
+		List<UserInGroup> groupUsers = groupManager.findUsersInGroup(userGroup);
+		for (UserInGroup userInGroup : groupUsers) {
+			Integer userId = userInGroup.getUserId();
+			User user = loadById(userId);
+			users.add(user);
+		}
+		return users;
 	}
 
 	@Transactional

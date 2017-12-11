@@ -2,17 +2,26 @@ package org.openforis.collect.manager;
 
 import static org.openforis.collect.config.CollectConfiguration.getUsersRestfulApiUrl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.openforis.collect.client.AbstractClient;
 import org.openforis.collect.model.User;
+import org.openforis.collect.model.UserGroup;
+import org.openforis.collect.model.UserInGroup;
 import org.openforis.collect.model.UserRole;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ClientUserManager extends AbstractClient implements UserManager  {
 
+	@Autowired
+	private UserGroupManager groupManager;
+	
 	@Override
 	public User loadById(Integer userId) {
 		User user = getOne(getUsersRestfulApiUrl() + "/user/" + userId, User.class);
@@ -50,8 +59,28 @@ public class ClientUserManager extends AbstractClient implements UserManager  {
 
 	@Override
 	public List<User> loadAllAvailableUsers(User availableTo) {
-		// TODO Auto-generated method stub
-		return null;
+		if (availableTo.getRoles().contains(UserRole.ADMIN)) {
+			return loadAll();
+		} else {
+			List<UserGroup> userGroups = groupManager.findByUser(availableTo);
+			Set<User> users = new TreeSet<User>();
+			for (UserGroup userGroup : userGroups) {
+				users.addAll(loadByGroup(userGroup));
+			}
+			//sorted by username by default (see User.compareTo)
+			return new ArrayList<User>(users);
+		}
+	}
+	
+	private Set<User> loadByGroup(UserGroup userGroup) {
+		Set<User> users = new TreeSet<User>();
+		List<UserInGroup> groupUsers = groupManager.findUsersInGroup(userGroup);
+		for (UserInGroup userInGroup : groupUsers) {
+			Integer userId = userInGroup.getUserId();
+			User user = loadById(userId);
+			users.add(user);
+		}
+		return users;
 	}
 	
 	@Override
@@ -77,7 +106,7 @@ public class ClientUserManager extends AbstractClient implements UserManager  {
 			put("username", username);
 			put("rawPassword", password);
 		}}, Map.class);
-		return (Boolean) result.get("success");
+		return Double.valueOf(200).equals(result.get("status"));
 	}
 	
 	@Override

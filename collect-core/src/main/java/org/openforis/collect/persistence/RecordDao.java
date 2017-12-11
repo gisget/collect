@@ -258,7 +258,8 @@ public class RecordDao extends JooqDaoSupport {
 		addRecordSummaryFilterConditions(q, filter);
 		
 		//add limit
-		if (filter.getOffset() != null && filter.getMaxNumberOfRecords() != null) {
+		if (filter.getOffset() != null && filter.getMaxNumberOfRecords() != null && 
+				filter.getMaxNumberOfRecords() > 0 && filter.getMaxNumberOfRecords() != Integer.MAX_VALUE) {
 			q.addLimit(filter.getOffset(), filter.getMaxNumberOfRecords());
 		}
 		

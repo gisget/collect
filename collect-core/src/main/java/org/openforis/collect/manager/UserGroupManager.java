@@ -17,18 +17,14 @@ public interface UserGroupManager extends ItemManager<UserGroup, Integer> {
 
 	String getDefaultPrivateUserGroupName(User user);
 	
+	UserGroup createDefaultPrivateUserGroup(User user, User createdByUser);
+
 	UserGroup findByName(String name);
 	
 	List<UserGroup> loadAll();
 	
-	List<UserGroup> findAllUserDefinedGroups();
-	
 	List<UserGroup> findAllRelatedUserGroups(User user);
 	
-	List<UserGroup> findPublicUserGroups();
-
-	List<UserGroup> findDescendantGroups(UserGroup group);
-
 	List<UserGroup> findByUser(User user);
 	
 	List<UserInGroup> findUsersInGroup(UserGroup userGroup);
@@ -50,8 +46,6 @@ public interface UserGroupManager extends ItemManager<UserGroup, Integer> {
 	void deleteRelation(int userGroupId, int userId);
 
 	void deleteAllUserRelations(int userId);
-
-	UserGroup createDefaultPrivateUserGroup(User user, User createdByUser);
 
 	void joinToDefaultPublicGroup(User user, UserGroupRole role);
 }

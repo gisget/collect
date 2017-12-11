@@ -3,7 +3,9 @@ package org.openforis.collect.manager;
 import static org.openforis.collect.config.CollectConfiguration.getUsersRestfulApiUrl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +45,7 @@ public class ClientUserGroupManager extends AbstractClient implements UserGroupM
 	
 	@Override
 	public List<UserGroup> loadAll() {
-		return getList(getUsersRestfulApiUrl() + "/group", UserGroup.class);
+		return fillLazyLoadedFields(getList(getUsersRestfulApiUrl() + "/group", UserGroup.class));
 	}
 	
 	@Override
@@ -73,20 +75,8 @@ public class ClientUserGroupManager extends AbstractClient implements UserGroupM
 	}
 	
 	@Override
-	public List<UserGroup> findAllUserDefinedGroups() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public List<UserGroup> findAllRelatedUserGroups(User user) {
-		return findByUser(user); //TODO search for ancestors/descendants
-	}
-	
-	@Override
-	public List<UserGroup> findDescendantGroups(UserGroup group) {
-		// TODO Auto-generated method stub
-		return null;
+		return fillLazyLoadedFields(findByUser(user)); //TODO search for ancestors/descendants
 	}
 	
 	@Override
@@ -114,17 +104,6 @@ public class ClientUserGroupManager extends AbstractClient implements UserGroupM
 			UserGroup group = loadById(groupId.intValue());
 			result.add(group);
 		}
-		result.add(getDefaultPublicUserGroup());
-		return result;
-	}
-	
-	@Override
-	public List<UserGroup> findPublicUserGroups() {
-		@SuppressWarnings("serial")
-		List<UserGroup> result = getList(getUsersRestfulApiUrl() + "/group", new HashMap<String, Object>(){{
-			put("visibility", "PUBLIC");
-			put("systemDefined", false);
-		}}, UserGroup.class);
 		return result;
 	}
 	
@@ -203,5 +182,25 @@ public class ClientUserGroupManager extends AbstractClient implements UserGroupM
 	@Override
 	public void joinToDefaultPublicGroup(User user, UserGroupRole role) {
 		// TODO Auto-generated method stub
+	}
+	
+	private <T extends Collection<UserGroup>> T fillLazyLoadedFields(T groups) {
+		for (UserGroup userGroup : groups) {
+			fillLazyLoadedFields(userGroup);
+		}
+		return groups;
+	}
+	
+	private UserGroup fillLazyLoadedFields(UserGroup group) {
+		if (group == null) {
+			return null;
+		} else {
+			List<UserInGroup> usersInGroup = findUsersInGroup(group);
+			group.setUsers(new HashSet<UserInGroup>(usersInGroup));
+			
+//			Set<Integer> childrenGroupIds = new HashSet<Integer>(findChildrenGroupIds(group.getId()));
+//			group.setChildrenGroupIds(childrenGroupIds);
+			return group;
+		}
 	}
 }

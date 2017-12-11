@@ -85,12 +85,6 @@ public class LocalUserGroupManager extends AbstractPersistedObjectManager<UserGr
 		return group;
 	}
 	
-	
-	@Override
-	public List<UserGroup> findAllUserDefinedGroups() {
-		return fillLazyLoadedFields(dao.findGroups(false, null));
-	}
-	
 	@Override
 	public List<UserGroup> findAllRelatedUserGroups(User user) {
 		Set<UserGroup> result = new HashSet<UserGroup>();
@@ -179,26 +173,6 @@ public class LocalUserGroupManager extends AbstractPersistedObjectManager<UserGr
 		return fillLazyLoadedFields(result);
 	}
 	
-	@Override
-	public List<UserGroup> findPublicUserGroups() {
-		return fillLazyLoadedFields(dao.findPublicGroups());
-	}
-
-	public List<UserGroup> findPublicUserDefinedGroups() {
-		return fillLazyLoadedFields(dao.findPublicUserDefinedGroups());
-	}
-	
-	@Override
-	public List<UserGroup> findDescendantGroups(UserGroup group) {
-		List<UserGroup> result = new ArrayList<UserGroup>();
-		List<Integer> childrenGroupIds = dao.findChildrenGroupIds(group.getId());
-		for (Integer childId : childrenGroupIds) {
-			UserGroup childGroup = loadById(childId);
-			result.add(childGroup);
-		}
-		return result;
-	}
-
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED)
 	public UserGroup save(UserGroup userGroup, User modifiedByUser) {
@@ -303,6 +277,7 @@ public class LocalUserGroupManager extends AbstractPersistedObjectManager<UserGr
 		} else {
 			List<UserInGroup> usersInGroup = dao.findUsersByGroup(group.getId());
 			group.setUsers(new HashSet<UserInGroup>(usersInGroup));
+			
 			Set<Integer> childrenGroupIds = new HashSet<Integer>(dao.findChildrenGroupIds(group.getId()));
 			group.setChildrenGroupIds(childrenGroupIds);
 			return group;
