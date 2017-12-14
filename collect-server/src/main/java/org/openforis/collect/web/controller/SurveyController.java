@@ -140,16 +140,16 @@ public class SurveyController extends BasicController {
 	@RequestMapping(method=GET)
 	public @ResponseBody
 	List<?> loadSurveys(
-			@RequestParam(value="userId", required=false) Integer userId,
+			@RequestParam(value="username", required=false) String username,
 			@RequestParam(value="groupId", required=false) Integer groupId,
 			@RequestParam(value="full", required=false) boolean fullSurveys,
 			@RequestParam(value="includeCodeListValues", required=false) boolean includeCodeListValues,
 			@RequestParam(value="includeTemporary", required=false) boolean includeTemporary) throws Exception {
 		String languageCode = Locale.ENGLISH.getLanguage();
-		if (userId == null) {
-			userId = sessionManager.getLoggedUser().getId();
+		if (username == null) {
+			username = sessionManager.getLoggedUser().getUsername();
 		}
-		Set<UserGroup> groups = getAvailableUserGrups(userId, groupId);
+		Set<UserGroup> groups = getAvailableUserGrups(username, groupId);
 		
 		List<SurveySummary> summaries = new ArrayList<SurveySummary>(surveyManager.getSurveySummaries(languageCode, groups));
 		if (includeTemporary) {
@@ -460,13 +460,13 @@ public class SurveyController extends BasicController {
 		return view;
 	}
 	
-	private Set<UserGroup> getAvailableUserGrups(Integer userId, Integer groupId) {
+	private Set<UserGroup> getAvailableUserGrups(String username, Integer groupId) {
 		if (groupId != null) {
 			UserGroup group = userGroupManager.loadById(groupId);
 			Set<UserGroup> groups = Collections.singleton(group);
 			return groups;
-		} else if (userId != null) {
-			User availableToUser = userId == null ? null : userManager.loadById(userId);
+		} else if (username != null) {
+			User availableToUser = userManager.loadByUserName(username);
 			List<UserGroup> groups = userGroupManager.findByUser(availableToUser);
 			return new HashSet<UserGroup>(groups);
 		} else {

@@ -27,14 +27,14 @@ public class RandomRecordGenerator extends RecordGenerator {
 		CollectSurvey survey = surveyManager.getById(surveyId);
 		User user = loadUser(parameters.getUserId(), parameters.getUsername());
 
-		RecordKey recordKey = provideRandomRecordKey(survey, user, parameters.isOnlyUnanalyzedSamplingPoints());
+		RecordKey recordKey = generateRandomRecordKey(survey, user, parameters.isOnlyUnanalyzedSamplingPoints());
 		if (recordKey == null) {
 			return null;
 		}
 		return this.generate(surveyId, parameters, recordKey);
 	}
 
-	private RecordKey provideRandomRecordKey(CollectSurvey survey, User user, boolean onlyUnanalyzed) {
+	public RecordKey generateRandomRecordKey(CollectSurvey survey, User user, boolean onlyUnanalyzed) {
 		Map<RecordKey, Integer> recordMeasurementsByKey = calculateRecordMeasurementsByKey(survey, user);
 		
 		if (recordMeasurementsByKey.isEmpty()) {

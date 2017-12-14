@@ -21,16 +21,24 @@ import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
 import org.geojson.MultiPoint;
+import org.openforis.collect.manager.RandomRecordGenerator;
+import org.openforis.collect.manager.RecordGenerator.RecordKey;
 import org.openforis.collect.manager.SamplingDesignManager;
 import org.openforis.collect.manager.SurveyManager;
+import org.openforis.collect.manager.UserManager;
 import org.openforis.collect.manager.dataexport.samplingdesign.SamplingDesignExportProcess;
 import org.openforis.collect.metamodel.SamplingPointDataKmlGenerator;
 import org.openforis.collect.model.CollectSurvey;
 import org.openforis.collect.model.CollectSurveyContext;
 import org.openforis.collect.model.SamplingDesignItem;
 import org.openforis.collect.model.SamplingDesignSummaries;
+import org.openforis.collect.model.User;
+import org.openforis.collect.persistence.RecordPersistenceException;
 import org.openforis.collect.utils.Controllers;
+import org.openforis.commons.collection.CollectionUtils;
 import org.openforis.idm.geospatial.CoordinateOperations;
+import org.openforis.idm.metamodel.AttributeDefinition;
+import org.openforis.idm.metamodel.EntityDefinition;
 import org.openforis.idm.metamodel.SpatialReferenceSystem;
 import org.openforis.idm.model.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +59,11 @@ public class SamplingPointsController extends BasicController {
 	@Autowired
 	private SurveyManager surveyManager;
 	@Autowired
+	private UserManager userManager;
+	@Autowired
 	private CoordinateOperations coordinateOperations;
+	@Autowired
+	private RandomRecordGenerator randomRecordGenerator;
 	
 	@RequestMapping(value="api/survey/{surveyId}/sampling_point_data", method=GET, produces=APPLICATION_JSON_VALUE)
 	public @ResponseBody
@@ -87,6 +99,22 @@ public class SamplingPointsController extends BasicController {
 	SamplingDesignItem updateSamplingPointItem(@PathVariable int surveyId, @RequestBody SamplingDesignItem item) {
 		samplingDesignManager.save(item);
 		return item;
+	}
+	
+	@RequestMapping(value="api/survey/{surveyId}/sampling_point_data/unanalyzed/random", method=GET)
+	public @ResponseBody
+	List<String> generateRandomUnanalyzedSamplingPointKey(@PathVariable("surveyId") int surveyId, 
+			@RequestParam("username") String username) throws RecordPersistenceException {
+		CollectSurvey survey = surveyManager.getById(surveyId);
+		User user = userManager.loadByUserName(username);
+		RecordKey key = randomRecordGenerator.generateRandomRecordKey(survey, user, true);
+		EntityDefinition rootEntityDef = survey.getSchema().getFirstRootEntityDefinition();
+		List<AttributeDefinition> keyAttributeDefinitions = rootEntityDef.getKeyAttributeDefinitions();
+		CollectionUtils.filter(keyAttributeDefinitions, def -> ! survey.getAnnotations().isMeasurementAttribute(def));
+		List<String> keyValues = keyAttributeDefinitions.stream()
+			.map(keyDef -> key.getValue(keyDef.getPath()))
+			.collect(Collectors.toList());
+		return keyValues;
 	}
 
 	@RequestMapping(value = "api/survey/{surveyId}/sampling_point_data.kml", method=GET, produces=KML_CONTENT_TYPE)
@@ -233,6 +261,19 @@ public class SamplingPointsController extends BasicController {
 		
 		public void setOnlyParentItem(boolean onlyParentItem) {
 			this.onlyParentItem = onlyParentItem;
+		}
+	}
+	
+	public static class RandomSamplingPointGeneratorParameters {
+		
+		private String username;
+
+		public String getUsername() {
+			return username;
+		}
+		
+		public void setUsername(String username) {
+			this.username = username;
 		}
 	}
 }
